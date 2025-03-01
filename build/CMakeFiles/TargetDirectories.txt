@@ -1,0 +1,3 @@
+/home/akijyo/桌面/code/c++/opendata/build/CMakeFiles/opendata.dir
+/home/akijyo/桌面/code/c++/opendata/build/CMakeFiles/edit_cache.dir
+/home/akijyo/桌面/code/c++/opendata/build/CMakeFiles/rebuild_cache.dir

@@ -1,0 +1,1 @@
+/usr/bin/g++ -g CMakeFiles/opendata.dir/main.cpp.o CMakeFiles/opendata.dir/public/stringop/stringop.cpp.o CMakeFiles/opendata.dir/public/stringop/demo1.cpp.o -o opendata

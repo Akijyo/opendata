@@ -26,5 +26,14 @@ std::string& deleteLChar(std::string& str,const char ch=' ');
 char* deleteRChar(char* str,const char ch=' ');
 std::string& deleteRChar(std::string& str,const char ch=' ');
 
+/**
+ * 删除字符串左右两边的指定字符，默认缺省为空格
+ * @param str 要处理的字符串
+ * @param ch 要删除的字符
+ * @return char* 处理后的字符串
+ */
+char* deleteChar(char* str,const char ch=' ');
+std::string& deleteChar(std::string& str,const char ch=' ');
+
 
 #endif //STRINGOP_H
