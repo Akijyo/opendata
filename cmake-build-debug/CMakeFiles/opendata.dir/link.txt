@@ -1,0 +1,1 @@
+/usr/bin/c++ -g CMakeFiles/opendata.dir/main.cpp.o -o opendata
