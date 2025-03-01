@@ -1,6 +1,10 @@
 file(REMOVE_RECURSE
   "CMakeFiles/opendata.dir/main.cpp.o"
   "CMakeFiles/opendata.dir/main.cpp.o.d"
+  "CMakeFiles/opendata.dir/public/stringop/demo1.cpp.o"
+  "CMakeFiles/opendata.dir/public/stringop/demo1.cpp.o.d"
+  "CMakeFiles/opendata.dir/public/stringop/stringop.cpp.o"
+  "CMakeFiles/opendata.dir/public/stringop/stringop.cpp.o.d"
   "opendata"
   "opendata.pdb"
 )

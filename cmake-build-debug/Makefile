@@ -153,6 +153,54 @@ main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/opendata.dir/build.make CMakeFiles/opendata.dir/main.cpp.s
 .PHONY : main.cpp.s
 
+public/stringop/demo1.o: public/stringop/demo1.cpp.o
+.PHONY : public/stringop/demo1.o
+
+# target to build an object file
+public/stringop/demo1.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/opendata.dir/build.make CMakeFiles/opendata.dir/public/stringop/demo1.cpp.o
+.PHONY : public/stringop/demo1.cpp.o
+
+public/stringop/demo1.i: public/stringop/demo1.cpp.i
+.PHONY : public/stringop/demo1.i
+
+# target to preprocess a source file
+public/stringop/demo1.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/opendata.dir/build.make CMakeFiles/opendata.dir/public/stringop/demo1.cpp.i
+.PHONY : public/stringop/demo1.cpp.i
+
+public/stringop/demo1.s: public/stringop/demo1.cpp.s
+.PHONY : public/stringop/demo1.s
+
+# target to generate assembly for a file
+public/stringop/demo1.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/opendata.dir/build.make CMakeFiles/opendata.dir/public/stringop/demo1.cpp.s
+.PHONY : public/stringop/demo1.cpp.s
+
+public/stringop/stringop.o: public/stringop/stringop.cpp.o
+.PHONY : public/stringop/stringop.o
+
+# target to build an object file
+public/stringop/stringop.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/opendata.dir/build.make CMakeFiles/opendata.dir/public/stringop/stringop.cpp.o
+.PHONY : public/stringop/stringop.cpp.o
+
+public/stringop/stringop.i: public/stringop/stringop.cpp.i
+.PHONY : public/stringop/stringop.i
+
+# target to preprocess a source file
+public/stringop/stringop.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/opendata.dir/build.make CMakeFiles/opendata.dir/public/stringop/stringop.cpp.i
+.PHONY : public/stringop/stringop.cpp.i
+
+public/stringop/stringop.s: public/stringop/stringop.cpp.s
+.PHONY : public/stringop/stringop.s
+
+# target to generate assembly for a file
+public/stringop/stringop.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/opendata.dir/build.make CMakeFiles/opendata.dir/public/stringop/stringop.cpp.s
+.PHONY : public/stringop/stringop.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -165,6 +213,12 @@ help:
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
+	@echo "... public/stringop/demo1.o"
+	@echo "... public/stringop/demo1.i"
+	@echo "... public/stringop/demo1.s"
+	@echo "... public/stringop/stringop.o"
+	@echo "... public/stringop/stringop.i"
+	@echo "... public/stringop/stringop.s"
 .PHONY : help
 
 
