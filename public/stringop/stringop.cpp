@@ -60,4 +60,4 @@ string& deleteRChar(string& str, const char ch)
     }
     return str;
 }
-
+//删除字符串两侧的指定字符,C语言版本

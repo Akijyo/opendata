@@ -1,9 +1,7 @@
 //
 // Created by akijyo on 25-3-1.
 // 这是开发框架中的字符串操作的通用函数声明
-
-#ifndef STRINGOP_H
-#define STRINGOP_H
+#pragma once
 
 #include "../cpublic.h" //c/c++常用头文件，如有新增在此文件中添加
 
@@ -36,4 +34,3 @@ char* deleteChar(char* str,const char ch=' ');
 std::string& deleteChar(std::string& str,const char ch=' ');
 
 
-#endif //STRINGOP_H

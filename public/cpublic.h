@@ -3,9 +3,7 @@
 //这是一个共用的头文件
 //包含了c/c++一些常用的系统头文件，
 //所有需要的系统头文件都在此文件中包含
-
-#ifndef CPUBLIC_H
-#define CPUBLIC_H
+#pragma once
 
 //c风格系统头文件
 #include <stdio.h>
@@ -61,4 +59,3 @@
 #include <thread>                // 线程类头文件。
 
 
-#endif //CPUBLIC_H
