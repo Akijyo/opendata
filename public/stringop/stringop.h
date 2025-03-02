@@ -84,8 +84,8 @@ std::string pickNum(const std::string &src, const bool bSigned = false, const bo
  * @brief 正则表达式匹配处理函数
  * 
  * @param str 需要去匹配的字符串
- * @param pattern 匹配规则
+ * @param pattern 正则表达式匹配规则
  * @return true 
  * @return false 
  */
-bool matchstr(const string &str, const string &pattern);
+bool matchstr(const std::string &str, const std::string &pattern);

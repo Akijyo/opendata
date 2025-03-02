@@ -198,7 +198,7 @@ bool replace(string &str, const string &src, const string &dest, const bool isLo
     }
 }
 //提取字符串中的数字,C语言版本
-char* pickNum(const string& src,char* dest,const bool bSigned=false,const bool bFloat=false)
+char* pickNum(const string& src,char* dest,const bool bSigned,const bool bFloat)
 {
     string destTemp(dest);
     pickNum(src,destTemp,bSigned,bFloat);
@@ -206,7 +206,7 @@ char* pickNum(const string& src,char* dest,const bool bSigned=false,const bool b
     return dest;
 }
 //提取字符串中的数字,C++版本
-string &pickNum(const string& src,string& dest,const bool bSigned=false,const bool bFloat=false)
+string &pickNum(const string& src,string& dest,const bool bSigned,const bool bFloat)
 {
     if(src.empty())//传入的字符串为空
     {
@@ -222,7 +222,7 @@ string &pickNum(const string& src,string& dest,const bool bSigned=false,const bo
     return dest;
 }
 //提取字符串中的数字,C++无须传参版本
-string pickNum(const string& src,const bool bSigned=false,const bool bFloat=false)
+string pickNum(const string& src,const bool bSigned,const bool bFloat)
 {
     if(src.empty())//传入的字符串为空
     {
