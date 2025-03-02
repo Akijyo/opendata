@@ -10,7 +10,7 @@ char* deleteLChar(char* str, const char ch)
 {
     if (str==nullptr)//传入的字符串为空
     {
-        return nullptr;
+        return str;
     }
     char* readPtr=str;
     char* writePtr=str;
@@ -50,7 +50,7 @@ char* deleteRChar(char* str, const char ch)
 {
     if (str==nullptr)//传入的字符串为空
     {
-        return nullptr;
+        return str;
     }
     int len=strlen(str);
     while (len>0&&str[len-1]==ch)//跳过右侧的指定字符
@@ -83,7 +83,7 @@ char* deleteChar(char* str,const char ch)
 {
     if(str==nullptr)//传入的字符串为空
     {
-        return nullptr;
+        return str;
     }
     str=deleteLChar(str,ch);//删除左侧的指定字符
     str=deleteRChar(str,ch);//删除右侧的指定字符
@@ -139,7 +139,7 @@ char* toLower(char* str)
 {
     if(str==nullptr)//传入的字符串为空
     {
-        return nullptr;
+        return str;
     }
     char *ptr = str;
     while(*ptr!='\0')
@@ -171,17 +171,77 @@ string& toLower(string& str)
 //将目标字符串str中的src字符串替换为dest字符串,C语言版本
 bool replace(char *str, const char *src, const char *dest, const bool isLoop)
 {
-    if(isLoop==true&&strstr(dest,src)!=nullptr)//替换后的字符串中包含被替换的字符串
-    {
-        return false;//循环替换会导致死循环
-    }
-    char *pos = strstr(str, src);
-    if(pos==nullptr)//目标字符串中不包含被替换的字符串
+    string strTemp(str);
+    if(replace(strTemp,src,dest,isLoop)==false)
     {
         return false;
     }
-    int srcLen = strlen(src);
-    int destLen = strlen(dest);
-    int strLen = strlen(str);
-    
+    strcpy(str, strTemp.c_str());
+    return true;
+}
+//将目标字符串str中的src字符串替换为dest字符串,C++版本
+bool replace(string &str, const string &src, const string &dest, const bool isLoop)
+{
+    if(str.empty()||src.empty())//传入的字符串为空
+    {
+        return false;
+    }
+    if(isLoop==true&&dest.find(src)!=string::npos)//替换后的字符串中包含被替换的字符串
+    {
+        return false;//循环替换会导致死循环
+    }
+    int index = 0;
+    while((index=str.find(src,index))!=string::npos)
+    {
+        str.replace(index,src.length(),dest);
+        index+=dest.length();
+    }
+}
+//提取字符串中的数字,C语言版本
+char* pickNum(const string& src,char* dest,const bool bSigned=false,const bool bFloat=false)
+{
+    string destTemp(dest);
+    pickNum(src,destTemp,bSigned,bFloat);
+    strcpy(dest,destTemp.c_str());
+    return dest;
+}
+//提取字符串中的数字,C++版本
+string &pickNum(const string& src,string& dest,const bool bSigned=false,const bool bFloat=false)
+{
+    if(src.empty())//传入的字符串为空
+    {
+        return dest;
+    }
+    for(auto &ch:src)
+    {
+        if((bSigned==true&&(ch=='+'||ch=='-'))||(bFloat==true&&ch=='.')||(ch>='0'&&ch<='9'))
+        {
+            dest+=ch;//提取数字，加减号，小数点
+        }
+    }
+    return dest;
+}
+//提取字符串中的数字,C++无须传参版本
+string pickNum(const string& src,const bool bSigned=false,const bool bFloat=false)
+{
+    if(src.empty())//传入的字符串为空
+    {
+        return string();
+    }
+    string dest;
+    for (auto &ch : src)
+    {
+        if((bSigned==true&&(ch=='+'||ch=='-'))||(bFloat==true&&ch=='.')||(ch>='0'&&ch<='9'))
+        {
+            dest+=ch;//提取数字，加减号，小数点
+        }
+    }
+    return dest;
+}
+//正则表达式匹配处理函数
+bool matchstr(const string &str, const string &pattern)
+{
+    const string temp = "R\"(" + pattern + ")\"";
+    regex reg(pattern);
+    return regex_match(str,reg);
 }
