@@ -64,8 +64,8 @@ std::string &toLower(std::string &str);
  * @return true 
  * @return false 
  */
-bool replace(char *str, const char *src, const char *dest, const bool isLoop = false);
-bool replace(std::string &str, const std::string &src, const std::string &dest, const bool isLoop = false);
+bool replaceStr(char *str, const char *src, const char *dest, const bool isLoop = false);
+bool replaceStr(std::string &str, const std::string &src, const std::string &dest, const bool isLoop = false);
 
 /**
  * @brief 从一个字符中提取数字，并放到另一个字符串中，可以选择提取符号和小数点

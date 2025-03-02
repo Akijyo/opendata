@@ -169,10 +169,14 @@ string& toLower(string& str)
     return str;
 }
 //将目标字符串str中的src字符串替换为dest字符串,C语言版本
-bool replace(char *str, const char *src, const char *dest, const bool isLoop)
+bool replaceStr(char *str, const char *src, const char *dest, const bool isLoop)
 {
+    if(str==nullptr||src==nullptr)//传入的字符串为空
+    {
+        return false;
+    }
     string strTemp(str);
-    if(replace(strTemp,src,dest,isLoop)==false)
+    if(replaceStr(strTemp,src,dest,isLoop)==false)
     {
         return false;
     }
@@ -180,7 +184,7 @@ bool replace(char *str, const char *src, const char *dest, const bool isLoop)
     return true;
 }
 //将目标字符串str中的src字符串替换为dest字符串,C++版本
-bool replace(string &str, const string &src, const string &dest, const bool isLoop)
+bool replaceStr(string &str, const string &src, const string &dest, const bool isLoop)
 {
     if(str.empty()||src.empty())//传入的字符串为空
     {
@@ -196,6 +200,7 @@ bool replace(string &str, const string &src, const string &dest, const bool isLo
         str.replace(index,src.length(),dest);
         index+=dest.length();
     }
+    return true;
 }
 //提取字符串中的数字,C语言版本
 char* pickNum(const string& src,char* dest,const bool bSigned,const bool bFloat)
