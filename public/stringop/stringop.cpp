@@ -275,9 +275,6 @@ bool ccmdstr::split(const string &str, const string &sep, bool isDeleteSpace)
         {
             temp=deleteChar(temp);//删除空格
         }
-        if (isDeleteSpace==true) {
-            deleteChar(temp);
-        }
         if (temp.empty()==false) {
             this->vstr.push_back(temp);
         }
@@ -302,7 +299,7 @@ ccmdstr::ccmdstr(const string &str, const string &sep, bool isDeleteSpace)
 
 bool ccmdstr::checkIndex(const int index)
 {
-    if (index < 0 || index >= this->vstr.size())//下表越界
+    if (index < 0 || index >= this->vstr.size())//下标越界
     {
         return false;
     }
@@ -312,7 +309,7 @@ bool ccmdstr::checkIndex(const int index)
 // 重载[]运算符，返回分割后的字符串,像数组一样访问
 string ccmdstr::operator[](const int index)
 {
-    if (index < 0 || index >= this->vstr.size())//下表越界
+    if (index < 0 || index >= this->vstr.size())//下标越界
     {
         return string();
     }
@@ -323,7 +320,7 @@ int ccmdstr::size()
 {
     return this->vstr.size();
 }
-// 获取分割后字符串的对应类型的值，需要指定下表
+// 获取分割后字符串的对应类型的值，需要指定下标
 bool ccmdstr::getValue(const int index, string &value)
 {
     this->checkIndex(index);
@@ -333,13 +330,15 @@ bool ccmdstr::getValue(const int index, string &value)
 bool ccmdstr::getValue(const int index, char *value, const int len)
 {
     this->checkIndex(index);
-    if (len <= this->size())
+    if (len <= this->vstr[index].length())
     {
-        strncpy(value, this->vstr[index].c_str(), this->size());
+        strncpy(value, this->vstr[index].c_str(), this->vstr[index].length());
+        value[this->vstr[index].length()] = '\0';
     }
     else
     {
         strncpy(value, this->vstr[index].c_str(), len);
+        value[len] = '\0';
     }
     return true;
 }
