@@ -1,0 +1,16 @@
+{
+    "name": "John",
+    "age": 30,
+    "city": "New York",
+    "score":50.5,
+    "family":{
+        "father":"Doe",
+        "mother":"Jane",
+        "sister":"Jenny"
+    },
+    "subjects":[
+        "Math",
+        "Science",
+        "English"
+    ]
+}

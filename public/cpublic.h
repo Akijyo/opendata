@@ -59,3 +59,4 @@
 #include <thread> // 线程类头文件。
 #include <regex>  // 正则表达式头文件。
 #include <chrono> // 时间头文件。
+#include "nlohmann/json.hpp"
