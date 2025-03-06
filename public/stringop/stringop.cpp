@@ -261,7 +261,6 @@ string pickNum(const string &src, const bool bSigned, const bool bFloat)
 // 正则表达式匹配处理函数
 bool matchstr(const string &str, const string &pattern)
 {
-    const string temp = "R\"(" + pattern + ")\"";
     regex reg(pattern);
     return regex_match(str, reg);
 }

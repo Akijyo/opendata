@@ -1,21 +1,21 @@
 #include "split.h"
 using namespace std;
-// ·Ö¸î×Ö·û´®µÄ·½·¨
+// åˆ†å‰²å­—ç¬¦ä¸²çš„æ–¹æ³•
 bool ccmdstr::split(const string &str, const string &sep, bool isDeleteSpace)
 {
-    if (str.empty() || sep.empty()) // ´«ÈëµÄ×Ö·û´®Îª¿Õ
+    if (str.empty() || sep.empty()) // ä¼ å…¥çš„å­—ç¬¦ä¸²ä¸ºç©º
     {
         return false;
     }
-    int index = 0; // ÓÃÓÚ±éÀúµÄÖ¸Õë
-    int start = 0; // ÓÃÓÚ´æ·Å×Ó×Ö·û´®µÄÆğÊ¼Î»ÖÃ
-    string temp;   // ´æ·Å½Ø»ñÏÂÀ´µÄÁÙÊ±×Ö·û´®
+    int index = 0; // ç”¨äºéå†çš„æŒ‡é’ˆ
+    int start = 0; // ç”¨äºå­˜æ”¾å­å­—ç¬¦ä¸²çš„èµ·å§‹ä½ç½®
+    string temp;   // å­˜æ”¾æˆªè·ä¸‹æ¥çš„ä¸´æ—¶å­—ç¬¦ä¸²
     while ((index = str.find(sep, index)) != string::npos)
     {
         temp = str.substr(start, index - start);
         if (isDeleteSpace == true)
         {
-            temp = deleteChar(temp); // É¾³ı¿Õ¸ñ
+            temp = deleteChar(temp); // åˆ é™¤ç©ºæ ¼
         }
         if (temp.empty() == false)
         {
@@ -36,7 +36,7 @@ bool ccmdstr::split(const string &str, const string &sep, bool isDeleteSpace)
     return true;
 }
 
-// ³¬¼¶¹¹Ôìº¯Êı£¬ÔÚ¹¹ÔìÆÚ¼äÍê³É×Ö·û´®µÄ·Ö¸î
+// è¶…çº§æ„é€ å‡½æ•°ï¼Œåœ¨æ„é€ æœŸé—´å®Œæˆå­—ç¬¦ä¸²çš„åˆ†å‰²
 ccmdstr::ccmdstr(const string &str, const string &sep, bool isDeleteSpace)
 {
     this->split(str, sep, isDeleteSpace);
@@ -44,37 +44,37 @@ ccmdstr::ccmdstr(const string &str, const string &sep, bool isDeleteSpace)
 
 bool ccmdstr::checkIndex(const int index)
 {
-    if (index < 0 || index >= this->vstr.size()) // ÏÂ±êÔ½½ç
+    if (index < 0 || index >= this->vstr.size()) // ä¸‹æ ‡è¶Šç•Œ
     {
         return false;
     }
     return true;
 }
 
-// ÖØÔØ[]ÔËËã·û£¬·µ»Ø·Ö¸îºóµÄ×Ö·û´®,ÏñÊı×éÒ»Ñù·ÃÎÊ
+// é‡è½½[]è¿ç®—ç¬¦ï¼Œè¿”å›åˆ†å‰²åçš„å­—ç¬¦ä¸²,åƒæ•°ç»„ä¸€æ ·è®¿é—®
 const string ccmdstr::operator[](const int index)const
 {
-    if (index < 0 || index >= this->vstr.size()) // ÏÂ±êÔ½½ç
+    if (index < 0 || index >= this->vstr.size()) // ä¸‹æ ‡è¶Šç•Œ
     {
         return string();
     }
     return this->vstr[index];
 }
 
-// ·µ»Ø×Ö·û´®Êı×éµÄ´óĞ¡
+// è¿”å›å­—ç¬¦ä¸²æ•°ç»„çš„å¤§å°
 int ccmdstr::size()const
 {
     return this->vstr.size();
 }
 
-// »ñÈ¡·Ö¸îºó×Ö·û´®µÄ¶ÔÓ¦ÀàĞÍµÄÖµ£¬ĞèÒªÖ¸¶¨ÏÂ±ê
+// è·å–åˆ†å‰²åå­—ç¬¦ä¸²çš„å¯¹åº”ç±»å‹çš„å€¼ï¼Œéœ€è¦æŒ‡å®šä¸‹æ ‡
 bool ccmdstr::getValue(const int index, string &value)
 {
     this->checkIndex(index);
     value = this->vstr[index];
     return true;
 }
-//ÌáÈ¡c·ç¸ñ×Ö·û´®ĞèÒª³ÌĞòÔ±Íâ²¿µ÷ÓÃÊ±Ö¸¶¨³¤¶È
+//æå–cé£æ ¼å­—ç¬¦ä¸²éœ€è¦ç¨‹åºå‘˜å¤–éƒ¨è°ƒç”¨æ—¶æŒ‡å®šé•¿åº¦
 bool ccmdstr::getValue(const int index, char *value, const int len)
 {
     if (len < 0)
@@ -97,7 +97,7 @@ bool ccmdstr::getValue(const int index, char *value, const int len)
 bool ccmdstr::getValue(const int index, int &value)
 {
     this->checkIndex(index);
-    try//ÓÃtry·ÀÖ¹stoiº¯ÊıÓöµ½´íÎóÊ±Å×³öÒì³£ÍË³ö³ÌĞò
+    try//ç”¨tryé˜²æ­¢stoiå‡½æ•°é‡åˆ°é”™è¯¯æ—¶æŠ›å‡ºå¼‚å¸¸é€€å‡ºç¨‹åº
     {
         value = stoi(pickNum(this->vstr[index], true));
     }
@@ -231,7 +231,7 @@ bool ccmdstr::getValue(const int index, bool &value)
     return value;
 }
 
-// ÖØÔØ<<ÔËËã·ûÈÃ´òÓ¡º¯Êı¿ÉÒÔÖ±½Ó´òÓ¡ccmdstr¶ÔÏó
+// é‡è½½<<è¿ç®—ç¬¦è®©æ‰“å°å‡½æ•°å¯ä»¥ç›´æ¥æ‰“å°ccmdstrå¯¹è±¡
 ostream &operator<<(ostream &os, const ccmdstr &cmdstr)
 {
     for (int i = 0; i < cmdstr.size(); i++)

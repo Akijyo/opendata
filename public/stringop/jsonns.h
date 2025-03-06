@@ -1,14 +1,14 @@
 #pragma once
 #include "stringop.h"
 
-// jsonÎÄ¼ş¶ÁÈ¡Àà
-// ÓÃÓÚ¶ÁÈ¡jsonÎÄ¼şÖĞµÄÊı¾İ
-// jsonÎÄ¼şµÄ¸ñÊ½Îª£º
+// jsonæ–‡ä»¶è¯»å–ç±»
+// ç”¨äºè¯»å–jsonæ–‡ä»¶ä¸­çš„æ•°æ®
+// jsonæ–‡ä»¶çš„æ ¼å¼ä¸ºï¼š
 // {
 //     "key1": "value1",
 //     "key2": "value2",
 // }
-// ²¢ÇÒ½«jsonÎÄ¼şÖĞµÄÊı¾İ°´ÕÕkey-valueµÄ·½Ê½¶ÁÈ¡
+// å¹¶ä¸”å°†jsonæ–‡ä»¶ä¸­çš„æ•°æ®æŒ‰ç…§key-valueçš„æ–¹å¼è¯»å–
 
 class jsonns
 {
@@ -19,25 +19,25 @@ class jsonns
     jsonns() {};
     jsonns(const jsonns &) = delete;
     jsonns &operator=(const jsonns &) = delete;
-    // ¹¹Ôìº¯Êı£¬¸ø¶¨ÎÄ¼şÃû£¬¶ÁÈ¡jsonÎÄ¼ş
+    // æ„é€ å‡½æ•°ï¼Œç»™å®šæ–‡ä»¶åï¼Œè¯»å–jsonæ–‡ä»¶
     jsonns(const std::string &fileName);
-    // ¶ÔÓÚÇ¶Ì×jsonµÄ¹¹Ôì´æ´¢
+    // å¯¹äºåµŒå¥—jsonçš„æ„é€ å­˜å‚¨
     jsonns(const jsonns &j, const std::string &key);
 
     /**
-     * @brief //¶ÔÓÚ¼òµ¥jsonÎÄ¼şµÄ¶ÁÈ¡£¬°´key-value·½Ê½¶ÁÈ¡
-     * Ğ´³ÉÄ£°æ£¬µ«ÊÇ±£Áôchar*µÄ°æ±¾
+     * @brief //å¯¹äºç®€å•jsonæ–‡ä»¶çš„è¯»å–ï¼ŒæŒ‰key-valueæ–¹å¼è¯»å–
+     * å†™æˆæ¨¡ç‰ˆï¼Œä½†æ˜¯ä¿ç•™char*çš„ç‰ˆæœ¬
      * @param key
-     * @param value ´æ·Å¶ÁÈ¡µ½µÄÖµ
+     * @param value å­˜æ”¾è¯»å–åˆ°çš„å€¼
      * @return true
      * @return false
      */
     bool getchArr(const std::string &key, char *value, const int len);
 
     /**
-     * @brief ·µ»ØjsonÎÄ¼şÖĞ¶ÔÓ¦keyµÄÖµµÄÄ£°æº¯Êı
+     * @brief è¿”å›jsonæ–‡ä»¶ä¸­å¯¹åº”keyçš„å€¼çš„æ¨¡ç‰ˆå‡½æ•°
      *
-     * @tparam T Ä£°æÀàĞÍ
+     * @tparam T æ¨¡ç‰ˆç±»å‹
      * @param key
      * @param value
      * @return true
@@ -45,7 +45,7 @@ class jsonns
      */
     template <class T> bool get(const std::string &key, T &value)
     {
-        if (this->j.find(key) == this->j.end()) // Ã»ÓĞÕÒµ½key
+        if (this->j.find(key) == this->j.end()) // æ²¡æœ‰æ‰¾åˆ°key
         {
             return false;
         }
@@ -61,11 +61,11 @@ class jsonns
     }
 
     /**
-     * @brief µ±´Îjson¶ÔÏóÊÇÒ»¸öjsonÊı×éÊ±£¬´ÓÊı×éÀï°´indexÈ¡Öµ
-     * Ä£°æº¯Êı
+     * @brief å½“æ¬¡jsonå¯¹è±¡æ˜¯ä¸€ä¸ªjsonæ•°ç»„æ—¶ï¼Œä»æ•°ç»„é‡ŒæŒ‰indexå–å€¼
+     * æ¨¡ç‰ˆå‡½æ•°
      * @tparam T
-     * @param index ¼üÖµ
-     * @param value ´æ·Å¶ÁÈ¡µ½µÄÖµ
+     * @param index é”®å€¼
+     * @param value å­˜æ”¾è¯»å–åˆ°çš„å€¼
      * @return true
      * @return false
      */
@@ -73,7 +73,7 @@ class jsonns
     {
         if (this->j.is_array() == false)
         {
-            std::cerr << "´Ëjson¶ÔÏó²»ÊÇÊı×é" << std::endl;
+            std::cerr << "æ­¤jsonå¯¹è±¡ä¸æ˜¯æ•°ç»„" << std::endl;
             return false;
         }
         if (this->j.size() <= index || index < 0)

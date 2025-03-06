@@ -3,15 +3,16 @@
 //
 
 #include "stringop.h"
-#include <string>
+#include "jsonns.h" 
 using namespace std;
 
 int main()
 {
-    jsonns j("test.json");
-    jsonns j1(j, "subjects");
-    string value;
-    j1.getForArr(0, value);
-    cout << value << endl;
+    string str;
+    string name = "akijyo";
+    int age = 20;
+    double score = 99.55555;
+    sFomat(str, "name:%s, age:%d, score:%.1f", name.c_str(), age, score);
+    cout << str << endl;
     return 0;
 }

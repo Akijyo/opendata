@@ -6,13 +6,13 @@ jsonns::jsonns(const string &fileName)
 {
     if(matchstr(fileName,"^.*\\.json$")==false)
     {
-        cout<<"ÎÄ¼þÃû²»ÊÇjsonÎÄ¼þ"<<endl;
+        cout<<"æ–‡ä»¶åä¸æ˜¯jsonæ–‡ä»¶"<<endl;
         return;
     }
     ifstream ifs(fileName, ios::in);
     if (ifs.is_open() == false)
     {
-        cout << "´ò¿ªÎÄ¼þÊ§°Ü" << endl;
+        cout << "æ‰“å¼€æ–‡ä»¶å¤±è´¥" << endl;
         return;
     }
     try
@@ -21,7 +21,7 @@ jsonns::jsonns(const string &fileName)
     }
     catch (const exception &e)
     {
-        cout << "½âÎöjsonÎÄ¼þÊ§°Ü" << endl;
+        cout << "è§£æžjsonæ–‡ä»¶å¤±è´¥" << endl;
         return;
     }
     ifs.close();
@@ -30,25 +30,25 @@ jsonns::jsonns(const jsonns &j, const string &key)
 {
     if(j.j.find(key)==j.j.end())
     {
-        cout<<"Ã»ÓÐÕÒµ½¶ÔÓ¦µÄkey"<<endl;
+        cout<<"æ²¡æœ‰æ‰¾åˆ°å¯¹åº”çš„key"<<endl;
         return;
     }
     this->j=j.j[key];
 }
 
-//¶ÀÁ¢µÄcÓïÑÔÊý×éÈ¡Öµº¯Êý
+//ç‹¬ç«‹çš„cè¯­è¨€æ•°ç»„å–å€¼å‡½æ•°
 bool jsonns::getchArr(const string &key, char *value, const int len)
 {
-    if(this->j.find(key)==this->j.end())//Ã»ÓÐÕÒµ½key
+    if(this->j.find(key)==this->j.end())//æ²¡æœ‰æ‰¾åˆ°key
     {
         return false;
     }
-    if(len>=this->j[key].size())//Èç¹ûÍâ²¿¸ø¶¨µÄlen´óÓÚµÈÓÚÀàÖÐ×Ö·û´®³¤¶È,Ö»¸´ÖÆÀàÖÐ×Ö·û´®
+    if(len>=this->j[key].size())//å¦‚æžœå¤–éƒ¨ç»™å®šçš„lenå¤§äºŽç­‰äºŽç±»ä¸­å­—ç¬¦ä¸²é•¿åº¦,åªå¤åˆ¶ç±»ä¸­å­—ç¬¦ä¸²
     {
         strcpy(value,this->j[key].get<string>().c_str());
         value[this->j[key].size()]='\0';
     }
-    else//Èç¹ûÍâ²¿¸ø¶¨µÄlenÐ¡ÓÚÀàÖÐ×Ö·û´®³¤¶È,Ö»¸´ÖÆlen³¤¶ÈµÄ×Ö·û´®
+    else//å¦‚æžœå¤–éƒ¨ç»™å®šçš„lenå°äºŽç±»ä¸­å­—ç¬¦ä¸²é•¿åº¦,åªå¤åˆ¶lené•¿åº¦çš„å­—ç¬¦ä¸²
     {
         strncpy(value,this->j[key].get<string>().c_str(),len);
         value[len]='\0';

@@ -4,6 +4,10 @@
 #pragma once
 
 #include "../cpublic.h" //c/c++常用头文件，如有新增在此文件中添加
+#include <complex>
+#include <cstddef>
+#include <cstdio>
+#include <string>
 
 
 /**
@@ -84,9 +88,57 @@ std::string pickNum(const std::string &src, const bool bSigned = false, const bo
  * @brief 正则表达式匹配处理函数
  *
  * @param str 需要去匹配的字符串
- * @param pattern 正则表达式匹配规则,会自动封上R"()"，不需要用户自己封
+ * @param pattern 正则表达式匹配规则
  * @return true
  * @return false
  */
 bool matchstr(const std::string &str, const std::string &pattern);
 
+
+/**
+ * @brief 使c++风格字符串格式化
+ *      通过调用snprintf函数，需要传入snprintf支持的参数
+ *      例如：sFomat(str, "%d", 123);
+ * @tparam Arg 
+ * @param str 存放格式化字符串
+ * @param fmt 格式
+ * @param args snprinf支持的参数
+ * @return true 
+ * @return false 
+ */
+template <class... Arg> bool sFomat(std::string &str, const char *fmt, Arg... args)
+{
+    int len = 0;
+    //计算格式化后长度，主要用于后面对str内存操作
+    len = snprintf(nullptr, 0, fmt, args...);
+    if (len < 0)
+    {
+        return false;
+    }
+    if (len == 0)
+    {
+        str.clear();
+        return true;
+    }
+    str.resize(len); // 重新分配内存
+    //对string内存进行操作，将格式化后的字符串写入str
+    len = snprintf(&str[0], len + 1, fmt, args...);
+    return true;
+}
+template <class... Arg> std::string sFomat(const char *fmt, Arg... args)//重载，返回string
+{
+    std::string str;
+    int len = 0;
+    len = snprintf(nullptr, 0, fmt, args...);
+    if (len < 0)
+    {
+        return str;
+    }
+    if (len == 0)
+    {
+        return str;
+    }
+    str.resize(len);
+    len = snprintf(&str[0], len + 1, fmt, args...);
+    return str;
+}
