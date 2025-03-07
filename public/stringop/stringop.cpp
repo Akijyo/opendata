@@ -230,6 +230,10 @@ string &pickNum(const string &src, string &dest, const bool bSigned, const bool 
     {
         return dest;
     }
+    if(dest.empty()==false)
+    {
+        dest.clear();
+    }
     for (auto &ch : src)
     {
         if ((bSigned == true && (ch == '+' || ch == '-')) || (bFloat == true && ch == '.') || (ch >= '0' && ch <= '9'))

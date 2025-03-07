@@ -8,7 +8,7 @@
             "name": "(gdb) 启动",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/public/stringop/demo01",
+            "program": "${workspaceFolder}/public/timeframe/demo02",
             "args": [
             ],
             "stopAtEntry": false,
