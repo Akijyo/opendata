@@ -1,3 +1,4 @@
+#pragma once
 #include "../cpublic.h"
 #include "../timeframe/timeframe.h"
 // 这个操作框架混用了linuxC和C++17的文件操作，后有待改进为统一的C++17文件操作

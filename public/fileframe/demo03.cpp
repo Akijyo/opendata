@@ -1,5 +1,5 @@
 #include "fileframe.h"
-#include <cstdio>
+#include "cdir.h"
 using namespace std;
 
 int main()
@@ -36,16 +36,49 @@ int main()
     // }
     // cout << "file time: " << time << endl;
 
-    string modifyTime = "2021-07-01 12:00:00";
-    if(setFileTime("/temp/aaa/test.txt", modifyTime,TimeType::TIME_TYPE_ONE) == false)
+    // string modifyTime = "2021-07-01 12:00:00";
+    // if(setFileTime("/temp/aaa/test.txt", modifyTime,TimeType::TIME_TYPE_ONE) == false)
+    // {
+    //     cout << "setFileTime failed" << endl;
+    // }
+    // string time;
+    // if (fileTime("/temp/aaa/test.txt", time, TimeType::TIME_TYPE_ONE) == false)
+    // {
+    //     cout << "fileTime failed" << endl;
+    // }
+    // cout << "file time: " << time << endl;
+
+    // cdir dir;
+    // if (dir.openDir("/temp/aaa", ".*\\.txt\\b")==false)
+    // {
+    //     cout << "openDir failed" << endl;
+    // }
+    // while (dir.readFile())
+    // {
+    //     cout << "dir.filename: " << dir.filename << endl;
+    //     cout << "dir.dirname: " << dir.dirname << endl;
+    //     cout << "dir.fullpath: " << dir.fullpath << endl;
+    //     cout << "dir.filesize: " << dir.filesize << endl;
+    //     cout << "dir.modifytime: " << dir.modifytime << endl;
+    //     cout << "dir.createtime: " << dir.createtime << endl;
+    //     cout << "dir.accesstime: " << dir.accesstime << endl;
+    // }
+
+    cdir dir;
+    if (dir.openDir("/temp/aaa", ".*\\.txt\\b",10000, true) == false)
     {
-        cout << "setFileTime failed" << endl;
+        cout << "openDir failed" << endl;
     }
-    string time;
-    if (fileTime("/temp/aaa/test.txt", time, TimeType::TIME_TYPE_ONE) == false)
+    while (dir.readFile())
     {
-        cout << "fileTime failed" << endl;
+        cout << "dir.filename: " << dir.filename << endl;
+        cout << "dir.dirname: " << dir.dirname << endl;
+        cout << "dir.fullpath: " << dir.fullpath << endl;
+        cout << "dir.filesize: " << dir.filesize << endl;
+        cout << "dir.modifytime: " << dir.modifytime << endl;
+        cout << "dir.createtime: " << dir.createtime << endl;
+        cout << "dir.accesstime: " << dir.accesstime << endl;
+        cout<<"----------------------"<<endl;
     }
-    cout << "file time: " << time << endl;
     return 0;
 }

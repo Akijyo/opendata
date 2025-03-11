@@ -16,7 +16,7 @@ bool newdir(const string &dir, bool isFile)
         return false;
     }
 
-    int pos = 1;//调过根目录的那个/
+    unsigned long pos = 1;//调过根目录的那个/
     while ((pos = dir.find('/', pos)) != string::npos)//循环查找下一个/
     {
         string subDir = dir.substr(0, pos++); // 截取要建立的子目录

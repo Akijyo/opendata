@@ -35,7 +35,7 @@ string &deleteLChar(string &str, const char ch)
     {
         return str;
     }
-    int start = 0;
+    unsigned long start = 0;
     while (start < str.length() && str[start] == ch) // 跳过左侧的指定字符
     {
         start++;
@@ -70,7 +70,7 @@ string &deleteRChar(string &str, const char ch)
     {
         return str;
     }
-    int end = str.length() - 1;
+    unsigned long end = str.length() - 1;
     while (end >= 0 && str[end] == ch) // 跳过右侧的指定字符
     {
         end--;
@@ -205,7 +205,7 @@ bool replaceStr(string &str, const string &src, const string &dest, const bool i
     {
         return false; // 循环替换会导致死循环
     }
-    int index = 0;
+    unsigned long index = 0;
     while ((index = str.find(src, index)) != string::npos)
     {
         str.replace(index, src.length(), dest);
