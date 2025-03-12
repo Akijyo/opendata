@@ -73,9 +73,9 @@ wtfile::~wtfile()
     }
 }
 
-// rdfile end
+// wtfile end
 /////////////////////////////////////////////////////////////////////////////
-// wrfile start
+// rdfile start
 
 // 判断文件是否已经打开
 bool rdfile::isOpen() const

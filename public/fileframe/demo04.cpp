@@ -6,7 +6,7 @@ int main()
     wtfile wr;
     wr.open("/temp/aaa/test222.txt");
     wr.writeLine("date=%s", "2021-01-01");
-    wr << "hello world";
+    wr << "hello world"<<"你好";
     wr.close();
 
     // rdfile rd;
