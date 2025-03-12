@@ -1,0 +1,135 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1,
+						2,
+						3
+					],
+					"jsonFile" : "directory-.-Debug-f5ebdc15457944623624.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.30"
+					},
+					"projectIndex" : 0,
+					"source" : "."
+				},
+				{
+					"build" : "public/stringop",
+					"jsonFile" : "directory-public.stringop-Debug-3908b9309bfb20a38092.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.30"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "public/stringop",
+					"targetIndexes" : 
+					[
+						3
+					]
+				},
+				{
+					"build" : "public/timeframe",
+					"jsonFile" : "directory-public.timeframe-Debug-b3de69ee9613eefd5ee2.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.30"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "public/timeframe",
+					"targetIndexes" : 
+					[
+						0
+					]
+				},
+				{
+					"build" : "public/fileframe",
+					"jsonFile" : "directory-public.fileframe-Debug-f3cf6ea5231e74227aa2.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.30"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "public/fileframe",
+					"targetIndexes" : 
+					[
+						1,
+						2
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3
+					],
+					"name" : "opendata",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 2,
+					"id" : "demo02::@7f7b51d56fa5a98a95a7",
+					"jsonFile" : "target-demo02-Debug-c0a0ba6d4f1a2ede23ce.json",
+					"name" : "demo02",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "demo03::@5a03b0a81d3139efb0d3",
+					"jsonFile" : "target-demo03-Debug-31e5389bcb676e9a94c3.json",
+					"name" : "demo03",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "demo04::@5a03b0a81d3139efb0d3",
+					"jsonFile" : "target-demo04-Debug-744f83b029a070b9b827.json",
+					"name" : "demo04",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "demo1::@0ad661c1711d3627fcae",
+					"jsonFile" : "target-demo1-Debug-f33e96b7defa8c5c854e.json",
+					"name" : "demo1",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/akijyo/\u684c\u9762/code/c++/opendata/build",
+		"source" : "/home/akijyo/\u684c\u9762/code/c++/opendata"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 7
+	}
+}

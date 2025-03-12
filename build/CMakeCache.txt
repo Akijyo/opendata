@@ -215,6 +215,15 @@ CMAKE_TAPI:FILEPATH=CMAKE_TAPI-NOTFOUND
 CMAKE_VERBOSE_MAKEFILE:BOOL=FALSE
 
 //Value Computed by CMake
+fileframe_BINARY_DIR:STATIC=/home/akijyo/桌面/code/c++/opendata/build/public/fileframe
+
+//Value Computed by CMake
+fileframe_IS_TOP_LEVEL:STATIC=OFF
+
+//Value Computed by CMake
+fileframe_SOURCE_DIR:STATIC=/home/akijyo/桌面/code/c++/opendata/public/fileframe
+
+//Value Computed by CMake
 opendata_BINARY_DIR:STATIC=/home/akijyo/桌面/code/c++/opendata/build
 
 //Value Computed by CMake
@@ -222,6 +231,24 @@ opendata_IS_TOP_LEVEL:STATIC=ON
 
 //Value Computed by CMake
 opendata_SOURCE_DIR:STATIC=/home/akijyo/桌面/code/c++/opendata
+
+//Value Computed by CMake
+stringop_BINARY_DIR:STATIC=/home/akijyo/桌面/code/c++/opendata/build/public/stringop
+
+//Value Computed by CMake
+stringop_IS_TOP_LEVEL:STATIC=OFF
+
+//Value Computed by CMake
+stringop_SOURCE_DIR:STATIC=/home/akijyo/桌面/code/c++/opendata/public/stringop
+
+//Value Computed by CMake
+timeframe_BINARY_DIR:STATIC=/home/akijyo/桌面/code/c++/opendata/build/public/timeframe
+
+//Value Computed by CMake
+timeframe_IS_TOP_LEVEL:STATIC=OFF
+
+//Value Computed by CMake
+timeframe_SOURCE_DIR:STATIC=/home/akijyo/桌面/code/c++/opendata/public/timeframe
 
 
 ########################
@@ -328,7 +355,7 @@ CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_NM
 CMAKE_NM-ADVANCED:INTERNAL=1
 //number of local generators
-CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=1
+CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=4
 //ADVANCED property for variable: CMAKE_OBJCOPY
 CMAKE_OBJCOPY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_OBJDUMP

@@ -117,89 +117,56 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named opendata
+# Target rules for targets named demo1
 
 # Build rule for target.
-opendata: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 opendata
-.PHONY : opendata
+demo1: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 demo1
+.PHONY : demo1
 
 # fast build rule for target.
-opendata/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/opendata.dir/build.make CMakeFiles/opendata.dir/build
-.PHONY : opendata/fast
+demo1/fast:
+	$(MAKE) $(MAKESILENT) -f public/stringop/CMakeFiles/demo1.dir/build.make public/stringop/CMakeFiles/demo1.dir/build
+.PHONY : demo1/fast
 
-main.o: main.cpp.o
-.PHONY : main.o
+#=============================================================================
+# Target rules for targets named demo02
 
-# target to build an object file
-main.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/opendata.dir/build.make CMakeFiles/opendata.dir/main.cpp.o
-.PHONY : main.cpp.o
+# Build rule for target.
+demo02: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 demo02
+.PHONY : demo02
 
-main.i: main.cpp.i
-.PHONY : main.i
+# fast build rule for target.
+demo02/fast:
+	$(MAKE) $(MAKESILENT) -f public/timeframe/CMakeFiles/demo02.dir/build.make public/timeframe/CMakeFiles/demo02.dir/build
+.PHONY : demo02/fast
 
-# target to preprocess a source file
-main.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/opendata.dir/build.make CMakeFiles/opendata.dir/main.cpp.i
-.PHONY : main.cpp.i
+#=============================================================================
+# Target rules for targets named demo03
 
-main.s: main.cpp.s
-.PHONY : main.s
+# Build rule for target.
+demo03: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 demo03
+.PHONY : demo03
 
-# target to generate assembly for a file
-main.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/opendata.dir/build.make CMakeFiles/opendata.dir/main.cpp.s
-.PHONY : main.cpp.s
+# fast build rule for target.
+demo03/fast:
+	$(MAKE) $(MAKESILENT) -f public/fileframe/CMakeFiles/demo03.dir/build.make public/fileframe/CMakeFiles/demo03.dir/build
+.PHONY : demo03/fast
 
-public/stringop/demo1.o: public/stringop/demo1.cpp.o
-.PHONY : public/stringop/demo1.o
+#=============================================================================
+# Target rules for targets named demo04
 
-# target to build an object file
-public/stringop/demo1.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/opendata.dir/build.make CMakeFiles/opendata.dir/public/stringop/demo1.cpp.o
-.PHONY : public/stringop/demo1.cpp.o
+# Build rule for target.
+demo04: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 demo04
+.PHONY : demo04
 
-public/stringop/demo1.i: public/stringop/demo1.cpp.i
-.PHONY : public/stringop/demo1.i
-
-# target to preprocess a source file
-public/stringop/demo1.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/opendata.dir/build.make CMakeFiles/opendata.dir/public/stringop/demo1.cpp.i
-.PHONY : public/stringop/demo1.cpp.i
-
-public/stringop/demo1.s: public/stringop/demo1.cpp.s
-.PHONY : public/stringop/demo1.s
-
-# target to generate assembly for a file
-public/stringop/demo1.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/opendata.dir/build.make CMakeFiles/opendata.dir/public/stringop/demo1.cpp.s
-.PHONY : public/stringop/demo1.cpp.s
-
-public/stringop/stringop.o: public/stringop/stringop.cpp.o
-.PHONY : public/stringop/stringop.o
-
-# target to build an object file
-public/stringop/stringop.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/opendata.dir/build.make CMakeFiles/opendata.dir/public/stringop/stringop.cpp.o
-.PHONY : public/stringop/stringop.cpp.o
-
-public/stringop/stringop.i: public/stringop/stringop.cpp.i
-.PHONY : public/stringop/stringop.i
-
-# target to preprocess a source file
-public/stringop/stringop.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/opendata.dir/build.make CMakeFiles/opendata.dir/public/stringop/stringop.cpp.i
-.PHONY : public/stringop/stringop.cpp.i
-
-public/stringop/stringop.s: public/stringop/stringop.cpp.s
-.PHONY : public/stringop/stringop.s
-
-# target to generate assembly for a file
-public/stringop/stringop.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/opendata.dir/build.make CMakeFiles/opendata.dir/public/stringop/stringop.cpp.s
-.PHONY : public/stringop/stringop.cpp.s
+# fast build rule for target.
+demo04/fast:
+	$(MAKE) $(MAKESILENT) -f public/fileframe/CMakeFiles/demo04.dir/build.make public/fileframe/CMakeFiles/demo04.dir/build
+.PHONY : demo04/fast
 
 # Help Target
 help:
@@ -209,16 +176,10 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... opendata"
-	@echo "... main.o"
-	@echo "... main.i"
-	@echo "... main.s"
-	@echo "... public/stringop/demo1.o"
-	@echo "... public/stringop/demo1.i"
-	@echo "... public/stringop/demo1.s"
-	@echo "... public/stringop/stringop.o"
-	@echo "... public/stringop/stringop.i"
-	@echo "... public/stringop/stringop.s"
+	@echo "... demo02"
+	@echo "... demo03"
+	@echo "... demo04"
+	@echo "... demo1"
 .PHONY : help
 
 

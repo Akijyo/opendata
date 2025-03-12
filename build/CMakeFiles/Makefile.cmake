@@ -11,6 +11,9 @@ set(CMAKE_MAKEFILE_DEPENDS
   "CMakeFiles/3.31.6/CMakeCCompiler.cmake"
   "CMakeFiles/3.31.6/CMakeCXXCompiler.cmake"
   "CMakeFiles/3.31.6/CMakeSystem.cmake"
+  "/home/akijyo/桌面/code/c++/opendata/public/fileframe/CMakeLists.txt"
+  "/home/akijyo/桌面/code/c++/opendata/public/stringop/CMakeLists.txt"
+  "/home/akijyo/桌面/code/c++/opendata/public/timeframe/CMakeLists.txt"
   "/snap/cmake/1445/share/cmake-3.31/Modules/CMakeCInformation.cmake"
   "/snap/cmake/1445/share/cmake-3.31/Modules/CMakeCXXInformation.cmake"
   "/snap/cmake/1445/share/cmake-3.31/Modules/CMakeCommonLanguageInclude.cmake"
@@ -50,9 +53,15 @@ set(CMAKE_MAKEFILE_OUTPUTS
 # Byproducts of CMake generate step:
 set(CMAKE_MAKEFILE_PRODUCTS
   "CMakeFiles/CMakeDirectoryInformation.cmake"
+  "public/stringop/CMakeFiles/CMakeDirectoryInformation.cmake"
+  "public/timeframe/CMakeFiles/CMakeDirectoryInformation.cmake"
+  "public/fileframe/CMakeFiles/CMakeDirectoryInformation.cmake"
   )
 
 # Dependency information for all targets:
 set(CMAKE_DEPEND_INFO_FILES
-  "CMakeFiles/opendata.dir/DependInfo.cmake"
+  "public/stringop/CMakeFiles/demo1.dir/DependInfo.cmake"
+  "public/timeframe/CMakeFiles/demo02.dir/DependInfo.cmake"
+  "public/fileframe/CMakeFiles/demo03.dir/DependInfo.cmake"
+  "public/fileframe/CMakeFiles/demo04.dir/DependInfo.cmake"
   )

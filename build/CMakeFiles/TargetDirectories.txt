@@ -1,3 +1,12 @@
-/home/akijyo/桌面/code/c++/opendata/build/CMakeFiles/opendata.dir
 /home/akijyo/桌面/code/c++/opendata/build/CMakeFiles/edit_cache.dir
 /home/akijyo/桌面/code/c++/opendata/build/CMakeFiles/rebuild_cache.dir
+/home/akijyo/桌面/code/c++/opendata/build/public/stringop/CMakeFiles/demo1.dir
+/home/akijyo/桌面/code/c++/opendata/build/public/stringop/CMakeFiles/edit_cache.dir
+/home/akijyo/桌面/code/c++/opendata/build/public/stringop/CMakeFiles/rebuild_cache.dir
+/home/akijyo/桌面/code/c++/opendata/build/public/timeframe/CMakeFiles/demo02.dir
+/home/akijyo/桌面/code/c++/opendata/build/public/timeframe/CMakeFiles/edit_cache.dir
+/home/akijyo/桌面/code/c++/opendata/build/public/timeframe/CMakeFiles/rebuild_cache.dir
+/home/akijyo/桌面/code/c++/opendata/build/public/fileframe/CMakeFiles/demo03.dir
+/home/akijyo/桌面/code/c++/opendata/build/public/fileframe/CMakeFiles/demo04.dir
+/home/akijyo/桌面/code/c++/opendata/build/public/fileframe/CMakeFiles/edit_cache.dir
+/home/akijyo/桌面/code/c++/opendata/build/public/fileframe/CMakeFiles/rebuild_cache.dir

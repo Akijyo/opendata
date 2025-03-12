@@ -1,20 +1,194 @@
 [
 {
-  "directory": "/home/akijyo/桌面/code/c++/opendata/build",
-  "command": "/usr/bin/g++   -g -std=gnu++20 -o CMakeFiles/opendata.dir/main.cpp.o -c /home/akijyo/桌面/code/c++/opendata/main.cpp",
-  "file": "/home/akijyo/桌面/code/c++/opendata/main.cpp",
-  "output": "CMakeFiles/opendata.dir/main.cpp.o"
-},
-{
-  "directory": "/home/akijyo/桌面/code/c++/opendata/build",
-  "command": "/usr/bin/g++   -g -std=gnu++20 -o CMakeFiles/opendata.dir/public/stringop/stringop.cpp.o -c /home/akijyo/桌面/code/c++/opendata/public/stringop/stringop.cpp",
-  "file": "/home/akijyo/桌面/code/c++/opendata/public/stringop/stringop.cpp",
-  "output": "CMakeFiles/opendata.dir/public/stringop/stringop.cpp.o"
-},
-{
-  "directory": "/home/akijyo/桌面/code/c++/opendata/build",
-  "command": "/usr/bin/g++   -g -std=gnu++20 -o CMakeFiles/opendata.dir/public/stringop/demo1.cpp.o -c /home/akijyo/桌面/code/c++/opendata/public/stringop/demo1.cpp",
+  "directory": "/home/akijyo/桌面/code/c++/opendata/build/public/stringop",
+  "command": "/usr/bin/g++  -I/home/akijyo/桌面/code/c++/opendata/public -g -std=gnu++20 -g -Wall -o CMakeFiles/demo1.dir/demo1.cpp.o -c /home/akijyo/桌面/code/c++/opendata/public/stringop/demo1.cpp",
   "file": "/home/akijyo/桌面/code/c++/opendata/public/stringop/demo1.cpp",
-  "output": "CMakeFiles/opendata.dir/public/stringop/demo1.cpp.o"
+  "output": "public/stringop/CMakeFiles/demo1.dir/demo1.cpp.o"
+},
+{
+  "directory": "/home/akijyo/桌面/code/c++/opendata/build/public/stringop",
+  "command": "/usr/bin/g++  -I/home/akijyo/桌面/code/c++/opendata/public -g -std=gnu++20 -g -Wall -o CMakeFiles/demo1.dir/__/fileframe/cdir.cpp.o -c /home/akijyo/桌面/code/c++/opendata/public/fileframe/cdir.cpp",
+  "file": "/home/akijyo/桌面/code/c++/opendata/public/fileframe/cdir.cpp",
+  "output": "public/stringop/CMakeFiles/demo1.dir/__/fileframe/cdir.cpp.o"
+},
+{
+  "directory": "/home/akijyo/桌面/code/c++/opendata/build/public/stringop",
+  "command": "/usr/bin/g++  -I/home/akijyo/桌面/code/c++/opendata/public -g -std=gnu++20 -g -Wall -o CMakeFiles/demo1.dir/__/fileframe/fileframe.cpp.o -c /home/akijyo/桌面/code/c++/opendata/public/fileframe/fileframe.cpp",
+  "file": "/home/akijyo/桌面/code/c++/opendata/public/fileframe/fileframe.cpp",
+  "output": "public/stringop/CMakeFiles/demo1.dir/__/fileframe/fileframe.cpp.o"
+},
+{
+  "directory": "/home/akijyo/桌面/code/c++/opendata/build/public/stringop",
+  "command": "/usr/bin/g++  -I/home/akijyo/桌面/code/c++/opendata/public -g -std=gnu++20 -g -Wall -o CMakeFiles/demo1.dir/__/fileframe/fileio.cpp.o -c /home/akijyo/桌面/code/c++/opendata/public/fileframe/fileio.cpp",
+  "file": "/home/akijyo/桌面/code/c++/opendata/public/fileframe/fileio.cpp",
+  "output": "public/stringop/CMakeFiles/demo1.dir/__/fileframe/fileio.cpp.o"
+},
+{
+  "directory": "/home/akijyo/桌面/code/c++/opendata/build/public/stringop",
+  "command": "/usr/bin/g++  -I/home/akijyo/桌面/code/c++/opendata/public -g -std=gnu++20 -g -Wall -o CMakeFiles/demo1.dir/jsonns.cpp.o -c /home/akijyo/桌面/code/c++/opendata/public/stringop/jsonns.cpp",
+  "file": "/home/akijyo/桌面/code/c++/opendata/public/stringop/jsonns.cpp",
+  "output": "public/stringop/CMakeFiles/demo1.dir/jsonns.cpp.o"
+},
+{
+  "directory": "/home/akijyo/桌面/code/c++/opendata/build/public/stringop",
+  "command": "/usr/bin/g++  -I/home/akijyo/桌面/code/c++/opendata/public -g -std=gnu++20 -g -Wall -o CMakeFiles/demo1.dir/split.cpp.o -c /home/akijyo/桌面/code/c++/opendata/public/stringop/split.cpp",
+  "file": "/home/akijyo/桌面/code/c++/opendata/public/stringop/split.cpp",
+  "output": "public/stringop/CMakeFiles/demo1.dir/split.cpp.o"
+},
+{
+  "directory": "/home/akijyo/桌面/code/c++/opendata/build/public/stringop",
+  "command": "/usr/bin/g++  -I/home/akijyo/桌面/code/c++/opendata/public -g -std=gnu++20 -g -Wall -o CMakeFiles/demo1.dir/stringop.cpp.o -c /home/akijyo/桌面/code/c++/opendata/public/stringop/stringop.cpp",
+  "file": "/home/akijyo/桌面/code/c++/opendata/public/stringop/stringop.cpp",
+  "output": "public/stringop/CMakeFiles/demo1.dir/stringop.cpp.o"
+},
+{
+  "directory": "/home/akijyo/桌面/code/c++/opendata/build/public/stringop",
+  "command": "/usr/bin/g++  -I/home/akijyo/桌面/code/c++/opendata/public -g -std=gnu++20 -g -Wall -o CMakeFiles/demo1.dir/__/timeframe/timeframe.cpp.o -c /home/akijyo/桌面/code/c++/opendata/public/timeframe/timeframe.cpp",
+  "file": "/home/akijyo/桌面/code/c++/opendata/public/timeframe/timeframe.cpp",
+  "output": "public/stringop/CMakeFiles/demo1.dir/__/timeframe/timeframe.cpp.o"
+},
+{
+  "directory": "/home/akijyo/桌面/code/c++/opendata/build/public/timeframe",
+  "command": "/usr/bin/g++  -I/home/akijyo/桌面/code/c++/opendata/public -g -std=gnu++20 -g -Wall -o CMakeFiles/demo02.dir/demo02.cpp.o -c /home/akijyo/桌面/code/c++/opendata/public/timeframe/demo02.cpp",
+  "file": "/home/akijyo/桌面/code/c++/opendata/public/timeframe/demo02.cpp",
+  "output": "public/timeframe/CMakeFiles/demo02.dir/demo02.cpp.o"
+},
+{
+  "directory": "/home/akijyo/桌面/code/c++/opendata/build/public/timeframe",
+  "command": "/usr/bin/g++  -I/home/akijyo/桌面/code/c++/opendata/public -g -std=gnu++20 -g -Wall -o CMakeFiles/demo02.dir/__/fileframe/cdir.cpp.o -c /home/akijyo/桌面/code/c++/opendata/public/fileframe/cdir.cpp",
+  "file": "/home/akijyo/桌面/code/c++/opendata/public/fileframe/cdir.cpp",
+  "output": "public/timeframe/CMakeFiles/demo02.dir/__/fileframe/cdir.cpp.o"
+},
+{
+  "directory": "/home/akijyo/桌面/code/c++/opendata/build/public/timeframe",
+  "command": "/usr/bin/g++  -I/home/akijyo/桌面/code/c++/opendata/public -g -std=gnu++20 -g -Wall -o CMakeFiles/demo02.dir/__/fileframe/fileframe.cpp.o -c /home/akijyo/桌面/code/c++/opendata/public/fileframe/fileframe.cpp",
+  "file": "/home/akijyo/桌面/code/c++/opendata/public/fileframe/fileframe.cpp",
+  "output": "public/timeframe/CMakeFiles/demo02.dir/__/fileframe/fileframe.cpp.o"
+},
+{
+  "directory": "/home/akijyo/桌面/code/c++/opendata/build/public/timeframe",
+  "command": "/usr/bin/g++  -I/home/akijyo/桌面/code/c++/opendata/public -g -std=gnu++20 -g -Wall -o CMakeFiles/demo02.dir/__/fileframe/fileio.cpp.o -c /home/akijyo/桌面/code/c++/opendata/public/fileframe/fileio.cpp",
+  "file": "/home/akijyo/桌面/code/c++/opendata/public/fileframe/fileio.cpp",
+  "output": "public/timeframe/CMakeFiles/demo02.dir/__/fileframe/fileio.cpp.o"
+},
+{
+  "directory": "/home/akijyo/桌面/code/c++/opendata/build/public/timeframe",
+  "command": "/usr/bin/g++  -I/home/akijyo/桌面/code/c++/opendata/public -g -std=gnu++20 -g -Wall -o CMakeFiles/demo02.dir/__/stringop/jsonns.cpp.o -c /home/akijyo/桌面/code/c++/opendata/public/stringop/jsonns.cpp",
+  "file": "/home/akijyo/桌面/code/c++/opendata/public/stringop/jsonns.cpp",
+  "output": "public/timeframe/CMakeFiles/demo02.dir/__/stringop/jsonns.cpp.o"
+},
+{
+  "directory": "/home/akijyo/桌面/code/c++/opendata/build/public/timeframe",
+  "command": "/usr/bin/g++  -I/home/akijyo/桌面/code/c++/opendata/public -g -std=gnu++20 -g -Wall -o CMakeFiles/demo02.dir/__/stringop/split.cpp.o -c /home/akijyo/桌面/code/c++/opendata/public/stringop/split.cpp",
+  "file": "/home/akijyo/桌面/code/c++/opendata/public/stringop/split.cpp",
+  "output": "public/timeframe/CMakeFiles/demo02.dir/__/stringop/split.cpp.o"
+},
+{
+  "directory": "/home/akijyo/桌面/code/c++/opendata/build/public/timeframe",
+  "command": "/usr/bin/g++  -I/home/akijyo/桌面/code/c++/opendata/public -g -std=gnu++20 -g -Wall -o CMakeFiles/demo02.dir/__/stringop/stringop.cpp.o -c /home/akijyo/桌面/code/c++/opendata/public/stringop/stringop.cpp",
+  "file": "/home/akijyo/桌面/code/c++/opendata/public/stringop/stringop.cpp",
+  "output": "public/timeframe/CMakeFiles/demo02.dir/__/stringop/stringop.cpp.o"
+},
+{
+  "directory": "/home/akijyo/桌面/code/c++/opendata/build/public/timeframe",
+  "command": "/usr/bin/g++  -I/home/akijyo/桌面/code/c++/opendata/public -g -std=gnu++20 -g -Wall -o CMakeFiles/demo02.dir/timeframe.cpp.o -c /home/akijyo/桌面/code/c++/opendata/public/timeframe/timeframe.cpp",
+  "file": "/home/akijyo/桌面/code/c++/opendata/public/timeframe/timeframe.cpp",
+  "output": "public/timeframe/CMakeFiles/demo02.dir/timeframe.cpp.o"
+},
+{
+  "directory": "/home/akijyo/桌面/code/c++/opendata/build/public/fileframe",
+  "command": "/usr/bin/g++  -I/home/akijyo/桌面/code/c++/opendata/public -g -std=gnu++20 -g -Wall -o CMakeFiles/demo03.dir/demo03.cpp.o -c /home/akijyo/桌面/code/c++/opendata/public/fileframe/demo03.cpp",
+  "file": "/home/akijyo/桌面/code/c++/opendata/public/fileframe/demo03.cpp",
+  "output": "public/fileframe/CMakeFiles/demo03.dir/demo03.cpp.o"
+},
+{
+  "directory": "/home/akijyo/桌面/code/c++/opendata/build/public/fileframe",
+  "command": "/usr/bin/g++  -I/home/akijyo/桌面/code/c++/opendata/public -g -std=gnu++20 -g -Wall -o CMakeFiles/demo03.dir/cdir.cpp.o -c /home/akijyo/桌面/code/c++/opendata/public/fileframe/cdir.cpp",
+  "file": "/home/akijyo/桌面/code/c++/opendata/public/fileframe/cdir.cpp",
+  "output": "public/fileframe/CMakeFiles/demo03.dir/cdir.cpp.o"
+},
+{
+  "directory": "/home/akijyo/桌面/code/c++/opendata/build/public/fileframe",
+  "command": "/usr/bin/g++  -I/home/akijyo/桌面/code/c++/opendata/public -g -std=gnu++20 -g -Wall -o CMakeFiles/demo03.dir/fileframe.cpp.o -c /home/akijyo/桌面/code/c++/opendata/public/fileframe/fileframe.cpp",
+  "file": "/home/akijyo/桌面/code/c++/opendata/public/fileframe/fileframe.cpp",
+  "output": "public/fileframe/CMakeFiles/demo03.dir/fileframe.cpp.o"
+},
+{
+  "directory": "/home/akijyo/桌面/code/c++/opendata/build/public/fileframe",
+  "command": "/usr/bin/g++  -I/home/akijyo/桌面/code/c++/opendata/public -g -std=gnu++20 -g -Wall -o CMakeFiles/demo03.dir/fileio.cpp.o -c /home/akijyo/桌面/code/c++/opendata/public/fileframe/fileio.cpp",
+  "file": "/home/akijyo/桌面/code/c++/opendata/public/fileframe/fileio.cpp",
+  "output": "public/fileframe/CMakeFiles/demo03.dir/fileio.cpp.o"
+},
+{
+  "directory": "/home/akijyo/桌面/code/c++/opendata/build/public/fileframe",
+  "command": "/usr/bin/g++  -I/home/akijyo/桌面/code/c++/opendata/public -g -std=gnu++20 -g -Wall -o CMakeFiles/demo03.dir/__/stringop/jsonns.cpp.o -c /home/akijyo/桌面/code/c++/opendata/public/stringop/jsonns.cpp",
+  "file": "/home/akijyo/桌面/code/c++/opendata/public/stringop/jsonns.cpp",
+  "output": "public/fileframe/CMakeFiles/demo03.dir/__/stringop/jsonns.cpp.o"
+},
+{
+  "directory": "/home/akijyo/桌面/code/c++/opendata/build/public/fileframe",
+  "command": "/usr/bin/g++  -I/home/akijyo/桌面/code/c++/opendata/public -g -std=gnu++20 -g -Wall -o CMakeFiles/demo03.dir/__/stringop/split.cpp.o -c /home/akijyo/桌面/code/c++/opendata/public/stringop/split.cpp",
+  "file": "/home/akijyo/桌面/code/c++/opendata/public/stringop/split.cpp",
+  "output": "public/fileframe/CMakeFiles/demo03.dir/__/stringop/split.cpp.o"
+},
+{
+  "directory": "/home/akijyo/桌面/code/c++/opendata/build/public/fileframe",
+  "command": "/usr/bin/g++  -I/home/akijyo/桌面/code/c++/opendata/public -g -std=gnu++20 -g -Wall -o CMakeFiles/demo03.dir/__/stringop/stringop.cpp.o -c /home/akijyo/桌面/code/c++/opendata/public/stringop/stringop.cpp",
+  "file": "/home/akijyo/桌面/code/c++/opendata/public/stringop/stringop.cpp",
+  "output": "public/fileframe/CMakeFiles/demo03.dir/__/stringop/stringop.cpp.o"
+},
+{
+  "directory": "/home/akijyo/桌面/code/c++/opendata/build/public/fileframe",
+  "command": "/usr/bin/g++  -I/home/akijyo/桌面/code/c++/opendata/public -g -std=gnu++20 -g -Wall -o CMakeFiles/demo03.dir/__/timeframe/timeframe.cpp.o -c /home/akijyo/桌面/code/c++/opendata/public/timeframe/timeframe.cpp",
+  "file": "/home/akijyo/桌面/code/c++/opendata/public/timeframe/timeframe.cpp",
+  "output": "public/fileframe/CMakeFiles/demo03.dir/__/timeframe/timeframe.cpp.o"
+},
+{
+  "directory": "/home/akijyo/桌面/code/c++/opendata/build/public/fileframe",
+  "command": "/usr/bin/g++  -I/home/akijyo/桌面/code/c++/opendata/public -g -std=gnu++20 -g -Wall -o CMakeFiles/demo04.dir/demo04.cpp.o -c /home/akijyo/桌面/code/c++/opendata/public/fileframe/demo04.cpp",
+  "file": "/home/akijyo/桌面/code/c++/opendata/public/fileframe/demo04.cpp",
+  "output": "public/fileframe/CMakeFiles/demo04.dir/demo04.cpp.o"
+},
+{
+  "directory": "/home/akijyo/桌面/code/c++/opendata/build/public/fileframe",
+  "command": "/usr/bin/g++  -I/home/akijyo/桌面/code/c++/opendata/public -g -std=gnu++20 -g -Wall -o CMakeFiles/demo04.dir/cdir.cpp.o -c /home/akijyo/桌面/code/c++/opendata/public/fileframe/cdir.cpp",
+  "file": "/home/akijyo/桌面/code/c++/opendata/public/fileframe/cdir.cpp",
+  "output": "public/fileframe/CMakeFiles/demo04.dir/cdir.cpp.o"
+},
+{
+  "directory": "/home/akijyo/桌面/code/c++/opendata/build/public/fileframe",
+  "command": "/usr/bin/g++  -I/home/akijyo/桌面/code/c++/opendata/public -g -std=gnu++20 -g -Wall -o CMakeFiles/demo04.dir/fileframe.cpp.o -c /home/akijyo/桌面/code/c++/opendata/public/fileframe/fileframe.cpp",
+  "file": "/home/akijyo/桌面/code/c++/opendata/public/fileframe/fileframe.cpp",
+  "output": "public/fileframe/CMakeFiles/demo04.dir/fileframe.cpp.o"
+},
+{
+  "directory": "/home/akijyo/桌面/code/c++/opendata/build/public/fileframe",
+  "command": "/usr/bin/g++  -I/home/akijyo/桌面/code/c++/opendata/public -g -std=gnu++20 -g -Wall -o CMakeFiles/demo04.dir/fileio.cpp.o -c /home/akijyo/桌面/code/c++/opendata/public/fileframe/fileio.cpp",
+  "file": "/home/akijyo/桌面/code/c++/opendata/public/fileframe/fileio.cpp",
+  "output": "public/fileframe/CMakeFiles/demo04.dir/fileio.cpp.o"
+},
+{
+  "directory": "/home/akijyo/桌面/code/c++/opendata/build/public/fileframe",
+  "command": "/usr/bin/g++  -I/home/akijyo/桌面/code/c++/opendata/public -g -std=gnu++20 -g -Wall -o CMakeFiles/demo04.dir/__/stringop/jsonns.cpp.o -c /home/akijyo/桌面/code/c++/opendata/public/stringop/jsonns.cpp",
+  "file": "/home/akijyo/桌面/code/c++/opendata/public/stringop/jsonns.cpp",
+  "output": "public/fileframe/CMakeFiles/demo04.dir/__/stringop/jsonns.cpp.o"
+},
+{
+  "directory": "/home/akijyo/桌面/code/c++/opendata/build/public/fileframe",
+  "command": "/usr/bin/g++  -I/home/akijyo/桌面/code/c++/opendata/public -g -std=gnu++20 -g -Wall -o CMakeFiles/demo04.dir/__/stringop/split.cpp.o -c /home/akijyo/桌面/code/c++/opendata/public/stringop/split.cpp",
+  "file": "/home/akijyo/桌面/code/c++/opendata/public/stringop/split.cpp",
+  "output": "public/fileframe/CMakeFiles/demo04.dir/__/stringop/split.cpp.o"
+},
+{
+  "directory": "/home/akijyo/桌面/code/c++/opendata/build/public/fileframe",
+  "command": "/usr/bin/g++  -I/home/akijyo/桌面/code/c++/opendata/public -g -std=gnu++20 -g -Wall -o CMakeFiles/demo04.dir/__/stringop/stringop.cpp.o -c /home/akijyo/桌面/code/c++/opendata/public/stringop/stringop.cpp",
+  "file": "/home/akijyo/桌面/code/c++/opendata/public/stringop/stringop.cpp",
+  "output": "public/fileframe/CMakeFiles/demo04.dir/__/stringop/stringop.cpp.o"
+},
+{
+  "directory": "/home/akijyo/桌面/code/c++/opendata/build/public/fileframe",
+  "command": "/usr/bin/g++  -I/home/akijyo/桌面/code/c++/opendata/public -g -std=gnu++20 -g -Wall -o CMakeFiles/demo04.dir/__/timeframe/timeframe.cpp.o -c /home/akijyo/桌面/code/c++/opendata/public/timeframe/timeframe.cpp",
+  "file": "/home/akijyo/桌面/code/c++/opendata/public/timeframe/timeframe.cpp",
+  "output": "public/fileframe/CMakeFiles/demo04.dir/__/timeframe/timeframe.cpp.o"
 }
 ]
