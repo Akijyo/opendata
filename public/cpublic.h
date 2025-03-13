@@ -25,6 +25,7 @@
 #include <dirent.h>
 #include <termios.h>
 #include <pthread.h>
+#include <stddef.h>
 #include <poll.h>
 #include <semaphore.h>
 #include <sys/stat.h>
@@ -60,4 +61,8 @@
 #include <regex>  // 正则表达式头文件。
 #include <chrono> // 时间头文件。
 #include <filesystem>
+#include <complex>
+#include <type_traits>
+#include <future>
+#include <functional>
 #include "nlohmann/json.hpp"
