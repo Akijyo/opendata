@@ -37,7 +37,7 @@ jsonns::jsonns(const jsonns &j, const string &key)
 }
 
 //独立的c语言数组取值函数
-bool jsonns::getchArr(const string &key, char *value, const int len)
+bool jsonns::getchArr(const string &key, char *value, const unsigned long len)
 {
     if(this->j.find(key)==this->j.end())//没有找到key
     {

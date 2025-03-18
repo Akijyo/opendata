@@ -87,7 +87,7 @@ void ThreadPool::addThread()
         unique_lock<mutex> lock(this->mtx);
         int count = (this->taskQueue.size() - this->liveThreadNum) * 2; // 任务队列中任务数减去存活线程数的两倍
         // 任务队列中任务数大于存活线程数，并且存活线程数小于最大线程数,则循环地不断增加工作线程
-        while (this->isRun && this->taskQueue.size() > this->liveThreadNum && this->liveThreadNum < this->maxThreadNum && count > 0)
+        while (this->isRun && this->taskQueue.size() > (unsigned long)this->liveThreadNum && this->liveThreadNum < this->maxThreadNum && count > 0)
         {
             thread t(&ThreadPool::workThread, this);
             workerID[t.get_id()] = move(t);

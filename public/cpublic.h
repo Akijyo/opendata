@@ -53,7 +53,8 @@
 #include <vector>
 #include <deque>
 #include <memory>
-#include <mutex>              // 互斥锁类的头文件。
+#include <mutex> // 互斥锁类的头文件。
+#include <shared_mutex>
 #include <queue>              // queue容器的头文件。
 #include <condition_variable> // 条件变量的头文件。
 #include <algorithm>

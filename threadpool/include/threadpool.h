@@ -1,3 +1,4 @@
+#pragma once
 #include "../../public/cpublic.h"
 
 class ThreadPool

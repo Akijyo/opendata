@@ -11,7 +11,7 @@ class ccmdstr
   private:
     std::vector<std::string> vstr; // 存放分割后的字符串
     // 检查index是否越界
-    bool checkIndex(const int index);
+    bool checkIndex(const unsigned long index);
 
   public:
     ccmdstr() {};
@@ -22,7 +22,7 @@ class ccmdstr
     ccmdstr(const std::string &src, const std::string &sep, bool isDeleteSpace = false);
 
     // 重载[]运算符，返回分割后的字符串,像数组一样访问
-    const std::string operator[](const int index)const;
+    const std::string operator[](const unsigned long index)const;
 
     /**
      * @brief 核心函数，按照指定的字符串进行分割，然后将结果存放到vstr中
@@ -47,7 +47,7 @@ class ccmdstr
      * @return false
      */
     bool getValue(const int index, std::string &value);
-    bool getValue(const int index, char *value, const int len);
+    bool getValue(const int index, char *value, const unsigned long len);
     bool getValue(const int index, int &value);
     bool getValue(const int index, unsigned int &value);
     bool getValue(const int index, long &value);

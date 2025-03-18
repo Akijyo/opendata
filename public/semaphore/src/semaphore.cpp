@@ -126,5 +126,6 @@ bool mysem::destroy()
     {
         perror("destroy semctl error!");
         return false;
-    }   
+    }
+    return true;
 }

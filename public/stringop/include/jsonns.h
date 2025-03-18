@@ -1,5 +1,6 @@
 #pragma once
 #include "stringop.h"
+#include <cstddef>
 
 // json文件读取类
 // 用于读取json文件中的数据
@@ -32,7 +33,7 @@ class jsonns
      * @return true
      * @return false
      */
-    bool getchArr(const std::string &key, char *value, const int len);
+    bool getchArr(const std::string &key, char *value, const unsigned long len);
 
     /**
      * @brief 返回json文件中对应key的值的模版函数

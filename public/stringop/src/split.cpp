@@ -7,7 +7,7 @@ bool ccmdstr::split(const string &str, const string &sep, bool isDeleteSpace)
     {
         return false;
     }
-    int index = 0; // 用于遍历的指针
+    unsigned long index = 0; // 用于遍历的指针
     int start = 0; // 用于存放子字符串的起始位置
     string temp;   // 存放截获下来的临时字符串
     while ((index = str.find(sep, index)) != string::npos)
@@ -42,7 +42,7 @@ ccmdstr::ccmdstr(const string &str, const string &sep, bool isDeleteSpace)
     this->split(str, sep, isDeleteSpace);
 }
 
-bool ccmdstr::checkIndex(const int index)
+bool ccmdstr::checkIndex(const unsigned long index)
 {
     if (index < 0 || index >= this->vstr.size()) // 下标越界
     {
@@ -52,7 +52,7 @@ bool ccmdstr::checkIndex(const int index)
 }
 
 // 重载[]运算符，返回分割后的字符串,像数组一样访问
-const string ccmdstr::operator[](const int index)const
+const string ccmdstr::operator[](const unsigned long index)const
 {
     if (index < 0 || index >= this->vstr.size()) // 下标越界
     {
@@ -75,7 +75,7 @@ bool ccmdstr::getValue(const int index, string &value)
     return true;
 }
 //提取c风格字符串需要程序员外部调用时指定长度
-bool ccmdstr::getValue(const int index, char *value, const int len)
+bool ccmdstr::getValue(const int index, char *value, const unsigned long len)
 {
     if (len < 0)
     {
