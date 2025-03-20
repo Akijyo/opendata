@@ -10,6 +10,7 @@ bool ccmdstr::split(const string &str, const string &sep, bool isDeleteSpace)
     unsigned long index = 0; // 用于遍历的指针
     int start = 0; // 用于存放子字符串的起始位置
     string temp;   // 存放截获下来的临时字符串
+    this->vstr.clear(); // 清空存放分割后字符串的数组
     while ((index = str.find(sep, index)) != string::npos)
     {
         temp = str.substr(start, index - start);

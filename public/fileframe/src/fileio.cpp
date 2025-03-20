@@ -100,6 +100,7 @@ bool rdfile::readLine(string &str, const string &endSign)
     {
         return false;
     }
+    str.clear(); // 清空传入的字符串
     string line; // 存放读取到的一行，这个函数需要判断结束符所以需要定义这个string去拼接
     while (true)
     {

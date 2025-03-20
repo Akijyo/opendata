@@ -1,11 +1,4 @@
 #include "../include/TcpServer.h"
-#include <cerrno>
-#include <cstddef>
-#include <cstdio>
-#include <netinet/in.h>
-#include <shared_mutex>
-#include <string>
-
 using namespace std;
 
 // 构造函数
@@ -41,7 +34,7 @@ TcpServer::~TcpServer()
     }
     unique_lock<shared_mutex> lock(this->clientMap_mtx);
     {
-        for (auto &it : this->client_map)
+        for (auto &it : this->client_map)//释放client_map中的所有资源
         {
             close(it.second->cfd);
         }
@@ -79,7 +72,7 @@ bool TcpServer::createListen(unsigned short port)
     }
     // 4.将监听套接字加入到epoll监听中
     struct epoll_event ev;
-    ev.events = EPOLLIN | EPOLLET;
+    ev.events = EPOLLIN | EPOLLET;//边缘触发模式
     ev.data.fd = this->fd;
     if (epoll_ctl(this->epfd, EPOLL_CTL_ADD, this->fd, &ev) == -1)
     {
@@ -117,22 +110,16 @@ bool TcpServer::epollSocket(ThreadPool *pool, function<void *(shared_ptr<clientN
         // 2. 遍历监听到的描述符
         for (int i = 0; i < num; i++)
         {
-            // TODO: // 对于边缘触发模式，由于epoll对每次事件只通知一次，但是我们下面的代码只处理了
-            //  一个面对客户端连入的socket，即256行的代码只获取到一个客户端连接
-            //  倘若在一个时间点并发请求过大，在程序一轮循环中epoll第一次检测到多个客户端连接，
-            //  但是我们只处理了一个，那么下一轮循环中，边缘触发模式的epoll将不再通知，导致
-            // accept函数不能从服务端套接字中处理上一轮循环中未处理的客户端连接
-
             int curfd = events[i].data.fd;
             // 1. 如果是监听描述符:
             if (curfd == this->fd)
             {
-                //   1. 开启新线程，接受连接
+                //   1.1. 开启新线程，接受连接
                 pool->addTask([this]() -> void * {
                     this->acceptConn();
                     return nullptr;
                 });
-                //   2. 将连接描述符加入到epoll监听中(已在acceptConn中加入)
+                //   1.2. 将连接描述符加入到epoll监听中(已在acceptConn中加入)
             }
             else
             {
@@ -178,7 +165,9 @@ bool TcpServer::heartbeatThread(const int time)
             unique_lock<shared_mutex> lock(this->clientMap_mtx);
             for (auto it = this->client_map.begin(); it != this->client_map.end();)
             {
+                //计数+1
                 it->second->addCount();
+                //如果计数超过3次，就断开连接
                 if (it->second->getCount() > 3)
                 {
                     cout << it->second->cfd << "（心跳包）客户端断开连接" << endl;
@@ -205,10 +194,11 @@ bool TcpServer::acceptConn()
     socklen_t addrlen = sizeof(caddr);
 
     // 2.接受客户端连接
-    // 由于是非阻塞+ET，所以需要循环接受
+    // 由于是非阻塞+ET，所以需要循环接受，不然高并发下会漏连接
     while (true)
     {
         int cfd = accept(this->fd, (sockaddr *)&caddr, &addrlen);
+        //非阻塞accept，如果没有连接请求，返回-1（失败），errno=EAGAIN或者EWOULDBLOCK
         if (cfd == -1)
         {
             if (errno == EAGAIN || errno == EWOULDBLOCK)
@@ -234,7 +224,7 @@ bool TcpServer::acceptConn()
         }
         // 6. 将连接描述符加入到epoll监听中
         struct epoll_event ev;
-        ev.events = EPOLLIN | EPOLLET;
+        ev.events = EPOLLIN | EPOLLET;//边缘触发模式
         ev.data.fd = cfd;
         if (epoll_ctl(this->epfd, EPOLL_CTL_ADD, cfd, &ev) == -1)
         {
@@ -383,78 +373,6 @@ bool TcpServer::recvMsgBin(void *buffer, std::shared_ptr<clientNode> client, Mes
     {
         cout << "接收消息内容失败" << endl;
         return false;
-    }
-    return true;
-}
-
-/////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////
-/**
- * @brief 读取n个字节，用于ET模式，是一个辅助函数，与上面的recvMsgWithType配合使用
- * 下面三个参数和recv这个linux库函数一致
- * @param fd 文件描述符
- * @param buffer 读取缓冲区
- * @param n 读取字节数
- * @return true
- * @return false
- */
-bool TcpServer::readn(int fd, void *buffer, size_t n)
-{
-    char *ptr = static_cast<char *>(buffer);
-    size_t total = 0;
-    while (total < n)
-    {
-        ssize_t ret = recv(fd, ptr + total, n - total, 0);
-        if (ret < 0)
-        {
-            if (errno == EINTR)
-            {
-                continue;
-            }
-            if (errno == EAGAIN || errno == EWOULDBLOCK)
-            {
-                continue;
-            }
-        }
-        else if (ret == 0)
-        {
-            return false;
-        }
-        total += ret;
-    }
-    return true;
-}
-
-/**
- * @brief 写n个字节，用于ET模式，是一个辅助函数，与上面的sendMsgWithType配合使用
- * 下面三个参数和send这个linux库函数一致
- * @param fd 文件描述符
- * @param buffer 写入缓冲区
- * @param n 写入字节数
- * @return true
- * @return false
- */
-bool TcpServer::sendn(int fd, void *buffer, size_t n)
-{
-    char *ptr = static_cast<char *>(buffer);
-    size_t total = 0;
-    while (total < n)
-    {
-        ssize_t ret = send(fd, ptr + total, n - total, 0);
-        if (ret < 0)
-        {
-            if (errno == EAGAIN || errno == EWOULDBLOCK)
-            {
-                continue;
-            }
-            if (errno == EINTR)
-            {
-                continue;
-            }
-            cout << "发送消息失败" << endl;
-            return false;
-        }
-        total += ret;
     }
     return true;
 }
