@@ -2,7 +2,8 @@
 #include "service/crtsurfdata/crtsurfdata.h"
 using namespace std;
 
-extern logfile lg;
+//创建日志对象的全局变量
+logfile lg;
 
 void closeIOSignal(bool io)
 {
@@ -32,6 +33,7 @@ int main(int argc, char *argv[])
         cout << "outpath:气象站点数据文件存放的目录" << endl;
         cout << "logfile:日志文件名" << endl;
     }
+    closeIOSignal(true);
 
     if (lg.open(argv[3]) == false)
     {
@@ -39,7 +41,6 @@ int main(int argc, char *argv[])
         return -1;
     }
 
-    closeIOSignal(false);
     signal(SIGINT, EXIT);
     signal(SIGTERM, EXIT);
 

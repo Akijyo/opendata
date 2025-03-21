@@ -8,8 +8,7 @@ list<st_stcode> stcodelist; // 存放站点参数的容器
 
 list<st_surfdata> surfdatalist; // 保存站点观测数据的列表
 
-//创建日志对象的全局变量
-logfile lg;
+extern logfile lg;
 
 
 // 把站点文件参数加载到容器中
