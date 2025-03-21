@@ -7,6 +7,7 @@ set(CMAKE_CXX_STANDARD 20)
 include_directories(public)
 include_directories(socket)
 include_directories(threadpool)
+include_directories(service)
 
 # 递归查找所有cpp文件
 file(GLOB_RECURSE ALL_CPP_FILE "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp")

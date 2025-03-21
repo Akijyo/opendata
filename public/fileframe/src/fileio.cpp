@@ -65,10 +65,7 @@ void wtfile::close()
 
 wtfile::~wtfile()
 {
-    if(this->fout.is_open())
-    {
-        this->fout.close();
-    }
+    this->close();
 }
 
 // wtfile end
@@ -155,8 +152,5 @@ void rdfile::close()
 
 rdfile::~rdfile()
 {
-    if(this->fin.is_open())
-    {
-        this->fin.close();
-    }
+    this->close();
 }
