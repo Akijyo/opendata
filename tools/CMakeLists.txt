@@ -7,6 +7,8 @@ include_directories(../public)
 include_directories(../socket)
 include_directories(../threadpool)
 
+add_compile_options(-Wall -g)
+
 
 file(GLOB_RECURSE PUBLIC_CPP_FILE "${CMAKE_CURRENT_SOURCE_DIR}/../public/*.cpp")
 file(GLOB_RECURSE SOCKET_CPP_FILE "${CMAKE_CURRENT_SOURCE_DIR}/../socket/*.cpp")

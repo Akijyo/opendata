@@ -1,10 +1,13 @@
 #include "modhead.h"
 #include "service/crtsurfdata/crtsurfdata.h"
+#include <unistd.h>
 
 using namespace std;
 
-//创建日志对象的全局变量
+// 创建日志对象的全局变量
 logfile lg;
+// 进程心跳
+procHeart mph;
 
 void closeIOSignal(bool io)
 {
@@ -28,11 +31,13 @@ int main(int argc, char *argv[])
     if (argc != 4)
     {
         cout << "usage: " << argv[0] << " <inifile> <outpath> <logfile>" << endl;
-        cout << "example: " << argv[0] << " /data/stcode.ini /output/surdata /log/logfile.log" << endl;
+        cout << "example:/home/akijyo/桌面/code/c++/opendata/tools/bin/processctrl 60 " << argv[0]
+             << " /data/stcode.ini /output/surdata /log/logfile.log" << endl;
 
         cout << "inifile: 气象站点参数文件名" << endl;
         cout << "outpath:气象站点数据文件存放的目录" << endl;
         cout << "logfile:日志文件名" << endl;
+        return 0;
     }
     closeIOSignal(true);
 
@@ -44,6 +49,8 @@ int main(int argc, char *argv[])
 
     signal(SIGINT, EXIT);
     signal(SIGTERM, EXIT);
+
+    mph.addProcInfo(getpid(), "agrv[0]", 10);
 
     lg.writeLine("程序开始运行");
 
