@@ -67,3 +67,8 @@
 #include <future>
 #include <functional>
 #include "nlohmann/json.hpp"
+#include "curlpp/cURLpp.hpp"
+#include "curlpp/Easy.hpp"
+#include "curlpp/Options.hpp"
+#include "curlpp/Infos.hpp"
+#include "curlpp/Exception.hpp"
