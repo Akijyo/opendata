@@ -34,11 +34,15 @@ class ftpClient : public iFTP
     bool getFileSize(const std::string &remoteFilename) override;
     bool getFileSize(const std::string &remoteFilename, unsigned long &size) override;
 
-    // 在服务器上创建目录
+    // 在服务器上创建目录，不能递归创建
     // dirname为要创建的目录名，返回值为创建成功与否
     bool mkdir(const std::string &remoteDirname) override;
 
-    // 在服务器上删除目录
+    // 在服务器上递归创建目录，但是不会考虑是否成功
+    // dirname为要创建的目录名
+    void mkdirrecus(const std::string &remoteDirname) override;
+
+    // 在服务器上删除目录，不提供递归删除，而且只删除空目录
     // dirname为要删除的目录名，返回值为删除成功与否
     bool rmdir(const std::string &remoteDirname) override;
 
@@ -71,6 +75,4 @@ class ftpClient : public iFTP
   private:
     //拼装ftpURL
     std::string rtnUrl(const std::string &remoteFD);
-    // 解析ftp的MDTM命令的时间格式，将YYYYMMDDHHMMSS转为time_t
-    time_t parseMDTMresponse(const std::string &response);
 };

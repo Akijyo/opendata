@@ -3,6 +3,7 @@
 #include "cpublic.h"
 #include "fileframe/include/fileframe.h"
 #include "timeframe/include/timeframe.h"
+#include "stringop/include/split.h"
 
 class iFileTransfer
 {
@@ -49,11 +50,15 @@ class iFileTransfer
     virtual bool getFileSize(const std::string &remoteFilename) = 0;
     virtual bool getFileSize(const std::string &remoteFilename, unsigned long &size) = 0;
 
-    // 在服务器上创建目录
+    // 在服务器上创建目录，不能递归创建
     // dirname为要创建的目录名，返回值为创建成功与否
     virtual bool mkdir(const std::string &remoteDirname) = 0;
 
-    // 在服务器上删除目录
+    // 在服务器上递归创建目录，但是不会考虑是否成功
+    // dirname为要创建的目录名
+    virtual void mkdirrecus(const std::string &remoteDirname)=0;
+
+    // 在服务器上删除目录，不提供递归删除，而且只删除空目录
     // dirname为要删除的目录名，返回值为删除成功与否
     virtual bool rmdir(const std::string &remoteDirname) = 0;
 
