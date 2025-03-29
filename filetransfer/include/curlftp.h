@@ -1,4 +1,4 @@
-#include "iftp.h"
+#include "ifilefransfer.h"
 #include <ctime>
 #include <curlpp/cURLpp.hpp>
 

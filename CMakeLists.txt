@@ -9,7 +9,7 @@ include_directories(public)
 include_directories(socket)
 include_directories(threadpool)
 include_directories(service)
-include_directories(cftp)
+include_directories(filetransfer)
 
 
 add_compile_options(-g -Wall)
@@ -41,7 +41,7 @@ add_executable(opendata main.cpp ${PUBLIC_CPP_FILE} ${SOCKET_CPP_FILE} ${THREAD_
 file(GLOB_RECURSE PUBLIC_CPP_FILE "${CMAKE_CURRENT_SOURCE_DIR}/public/*.cpp")
 file(GLOB_RECURSE SOCKET_CPP_FILE "${CMAKE_CURRENT_SOURCE_DIR}/socket/*.cpp")
 file(GLOB_RECURSE THREAD_CPP_FILE "${CMAKE_CURRENT_SOURCE_DIR}/threadpool/*.cpp")
-file(GLOB_RECURSE CFTP_CPP_FILE "${CMAKE_CURRENT_SOURCE_DIR}/cftp/*.cpp")
+file(GLOB_RECURSE CFTP_CPP_FILE "${CMAKE_CURRENT_SOURCE_DIR}/filetransfer/*.cpp")
 
 
 #add_subdirectory(demo/stringopd)
