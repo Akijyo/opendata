@@ -1,9 +1,12 @@
 #include "include/curlftp.h"
+#include "fileframe/include/fileframe.h"
 #include "stringop/include/split.h"
 #include "stringop/include/stringop.h"
 #include "timeframe/include/timeframe.h"
 #include <cstdio>
+#include <curlpp/Easy.hpp>
 #include <curlpp/Options.hpp>
+#include <fstream>
 #include <sstream>
 using namespace std;
 
@@ -116,7 +119,7 @@ bool ftpClient::mkdir(const string &remoteDirname)
         request.setOpt(curlpp::options::Url("ftp://" + this->host));
         // 设置ftp服务器的用户名和密码
         request.setOpt(curlpp::options::UserPwd(this->u_p));
-        // 不关注文件
+        // 不关注文件，可以防止多余输出
         request.setOpt(curlpp::options::NoBody(true));
         // 发送创建目录的命令
         list<string> command;
@@ -124,7 +127,7 @@ bool ftpClient::mkdir(const string &remoteDirname)
         request.setOpt(curlpp::options::Quote(command));
 
         // 启用调试信息，查看 FTP 服务器返回的消息
-        request.setOpt(new curlpp::options::Verbose(true));
+        //request.setOpt(new curlpp::options::Verbose(true));
 
         // 执行请求
         request.perform();
@@ -148,7 +151,7 @@ void ftpClient::mkdirrecus(const string &remoteDirname)
     request.setOpt(curlpp::options::Url("ftp://" + this->host));
     // 设置ftp服务器的用户名和密码
     request.setOpt((curlpp::options::UserPwd(this->u_p)));
-    // 不关注文件
+    // 不关注文件，可以防止多余输出
     request.setOpt(curlpp::options::NoBody(true));
 
     // 启用调试信息，查看 FTP 服务器返回的消息
@@ -185,13 +188,15 @@ bool ftpClient::rmdir(const string &remoteDirname)
         request.setOpt(new curlpp::options::Url("ftp://" + this->host));
         // 设置ftp服务器的用户名和密码
         request.setOpt(new curlpp::options::UserPwd(this->u_p));
+        // 不关注文件，可以防止多余输出
+        request.setOpt(new curlpp::options::NoBody(true));
         // 设置删除目录的命令
         list<string> command;
         command.push_back("RMD " + remoteDirname);
         request.setOpt(new curlpp::options::Quote(command));
 
         // 启用调试信息，查看 FTP 服务器返回的消息
-        request.setOpt(new curlpp::options::Verbose(true));
+        //request.setOpt(new curlpp::options::Verbose(true));
 
         // 执行请求
         request.perform();
@@ -213,6 +218,8 @@ bool ftpClient::rmfile(const string &remoteFilename)
         request.setOpt(new curlpp::options::Url("ftp://" + this->host));
         // 设置ftp服务器的用户名和密码
         request.setOpt(new curlpp::options::UserPwd(this->u_p));
+        // 不关注文件，可以防止多余输出
+        request.setOpt(new curlpp::options::NoBody(true));
         // 设置删除文件的命令
         list<string> command;
         command.push_back("DELE " + remoteFilename);
@@ -246,6 +253,9 @@ bool ftpClient::rename(const string &oldname, const string &newname)
         command.push_back("RNFR " + oldname);
         command.push_back("RNTO " + newname);
         request.setOpt(new curlpp::options::Quote(command));
+        // 吸收多余的标准输出
+        ostringstream response;
+        request.setOpt(new curlpp::options::WriteStream(&response));
 
         // 启用调试信息，查看 FTP 服务器返回的消息
         // request.setOpt(new curlpp::options::Verbose(true));
@@ -316,7 +326,7 @@ bool ftpClient::site(const string &cmd)
         request.setOpt(new curlpp::options::CustomRequest("SITE " + cmd));
 
         // 启用调试信息，查看 FTP 服务器返回的消息
-        request.setOpt(new curlpp::options::Verbose(true));
+        //request.setOpt(new curlpp::options::Verbose(true));
 
         // 执行请求
         request.perform();
@@ -339,10 +349,163 @@ bool ftpClient::site(const string &cmd)
 
 bool ftpClient::download(const string &remoteFilename, const string &localFilename, bool check)
 {
+    // 创建本地目录
+    if (!newdir(localFilename, true))
+    {
+        return false;
+    }
+    // 如果需要检查文件是否被修改
+    string beforeTime;
+    unsigned long beforeSize = 0;
+    if (check == true)
+    {
+        // 获取远程文件最后修改时间
+        if (!this->getModifyTime(remoteFilename, beforeTime))
+        {
+            return false;
+        }
+        // 获取远程文件大小
+        if (!this->getFileSize(remoteFilename, beforeSize))
+        {
+            return false;
+        }
+    }
+
+    // **下载文件逻辑**
+    // 创建临时文件名
+    string tempfile = localFilename + ".tmp";
+    // 打开临时文件
+    ofstream downl(tempfile, ios::binary);
+    if (!downl.is_open())
+    {
+        return false;
+    }
+    curlpp::Easy request;
+    try
+    {
+        // 设置请求的url
+        request.setOpt(new curlpp::options::Url(this->rtnUrl(remoteFilename)));
+        // 设置ftp服务器的用户名和密码
+        request.setOpt(new curlpp::options::UserPwd(this->u_p));
+        // 设置下载的文件名
+        request.setOpt(new curlpp::options::WriteStream(&downl));
+
+        // 启用调试信息，查看 FTP 服务器返回的消息
+        // request.setOpt(new curlpp::options::Verbose(true));
+
+        // 执行请求
+        request.perform();
+        // 关闭临时文件
+        downl.close();
+    }
+    catch (const curlpp::RuntimeError &e)
+    {
+        cerr << "下载文件失败: " << e.what() << endl;
+        downl.close();
+        // 删除临时文件
+        deletefile(tempfile);
+        return false;
+    }
+
+    // 检查下载的文件是否被修改
+    string afterTime;
+    unsigned long afterSize = 0;
+    if (check == true)
+    {
+        // 获取远程文件的最后修改时间，获取下载得来的本地文件大小
+        if ((!this->getModifyTime(remoteFilename, afterTime)) || (afterSize = fileSize(tempfile)) == -1)
+        {
+            // 删除临时文件
+            deletefile(tempfile);
+            return false;
+        }
+        // 检查文件前后的修改时间和文件大小是否相同
+        if ((beforeTime != afterTime) || (beforeSize != afterSize))
+        {
+            // 删除临时文件
+            deletefile(tempfile);
+            return false;
+        }
+    }
+    // 重命名临时文件为正文件
+    renamefile(tempfile, localFilename);
     return true;
 }
 
 bool ftpClient::upload(const string &localFilename, const string &remoteFilename, bool check)
 {
+    // 如果需要检查文件是否被修改
+    string beforeTime;
+    unsigned long beforeSize = 0;
+    if (check == true)
+    {
+        // 获取文件最后修改时间
+        if((!fileTime(localFilename, beforeTime))||(beforeSize = fileSize(localFilename)) == -1)
+        {
+            return false;
+        }
+    }
+    // **上传文件逻辑**
+    curlpp::Easy request;
+    string tempfile = remoteFilename + ".tmp";
+    // ifstream打开本地文件
+    ifstream upl(localFilename, ios::binary);
+    if (!upl.is_open())
+    {
+        return false;
+    }
+
+    try
+    {
+        // 设置请求的url
+        request.setOpt(new curlpp::options::Url(this->rtnUrl(tempfile)));
+        // 设置ftp服务器的用户名和密码
+        request.setOpt(new curlpp::options::UserPwd(this->u_p));
+        // 开启上传模式
+        request.setOpt(new curlpp::options::Upload(true));
+        // 设置上传的文件大小
+        request.setOpt(new curlpp::options::InfileSize(beforeSize));
+        // 设置上传的文件
+        request.setOpt(new curlpp::options::ReadStream(&upl));
+
+        // 启用调试信息，查看 FTP 服务器返回的消息
+        request.setOpt(new curlpp::options::Verbose(false));
+
+        // 执行请求
+        request.perform();
+        // 关闭本地文件
+        upl.close();
+    }
+    catch (const curlpp::RuntimeError &e)
+    {
+        cerr << "上传文件失败: " << e.what() << endl;
+        // 关闭本地文件
+        upl.close();
+        // 删除临时文件
+        this->rmfile(tempfile);
+        return false;
+    }
+
+    // 检查上传的文件是否被修改
+    string afterTime;
+    unsigned long afterSize = 0;
+    if (check == true)
+    {
+        // 获取本地的文件的最后修改时间，获取上传得来的远程文件大小
+        if ((!fileTime(localFilename, afterTime)) || ((!this->getFileSize(tempfile, afterSize))))
+        {
+            // 删除临时文件
+            this->rmfile(tempfile);
+            return false;
+        }
+        if((afterTime != beforeTime) || (afterSize != beforeSize))
+        {
+            // 删除临时文件
+            this->rmfile(tempfile);
+            return false;
+        }
+    }
+    // 重命名临时文件为正文件
+    this->rename(tempfile, remoteFilename);
     return true;
 }

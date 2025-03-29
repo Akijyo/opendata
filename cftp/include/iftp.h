@@ -73,11 +73,13 @@ class iFileTransfer
     // 在服务器上下载文件
     // remoteFilename为服务器上的文件名，localFilename为本地文件名，返回值为下载成功与否
     // check为检查文件在下载过程中是否被修改，如果为true则下载后会检查文件的最后修改时间和大小
+    // 本地的文件目录会自动创建，如果目录不存在则会创建目录
     virtual bool download(const std::string &remoteFilename, const std::string &localFilename, bool check = true) = 0;
 
     // 在服务器上上传文件
     // localFilename为本地文件名，remoteFilename为服务器上的文件名，返回值为上传成功与否
     // check为检查文件在上传过程中是否被修改，如果为true则上传后会检查文件的最后修改时间和大小
+    // 远程目录如果不存在，不会创建，需要上传至的目录必须存在。
     virtual bool upload(const std::string &localFilename, const std::string &remoteFilename, bool check = true) = 0;
 };
 
