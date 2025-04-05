@@ -1,0 +1,13 @@
+{
+	"host": "127.0.0.1:21",
+	"user": "akijyo",
+	"password": "13690919281qq",
+	"remote_path": "/temp/output/surfdata/",
+	"local_path": "/idcdata/surfdata/",
+	"matchfile": ".*\\.json\\b",
+	"ptype":"1",
+	"backup_path":"/temp/backup/download",
+	"finished_file":"/idcdata/surfdata/finished/list.txt",
+	"ischeck":true,
+	"phtimeout":"180"
+}

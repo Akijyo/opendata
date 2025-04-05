@@ -14,7 +14,8 @@ class iFileTransfer
     std::string u_p;    // 用户:密码的组合结构，用于登录
   public:
     std::string modifyTime; // 文件的最后修改时间
-    unsigned long filesize;//文件大小
+    unsigned long filesize; // 文件大小
+    std::string errmsg; // 错误信息，ftp服务器返回的错误信息
 
     iFileTransfer()=default;
     // 构造函数初始化

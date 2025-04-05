@@ -47,3 +47,5 @@ class procHeart
 // 删除共享内存：  ipcrm -m shmid
 // 查看信号量：      ipcs -s
 // 删除信号量：      ipcrm sem semid
+
+void closeiosignal(bool io);

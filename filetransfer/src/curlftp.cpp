@@ -38,7 +38,8 @@ bool ftpClient::getModifyTime(const string &remoteFilename, TimeType type)
     }
     catch (const curlpp::RuntimeError &e)
     {
-        cerr << "请求失败: " << e.what() << endl;
+        cerr << "获取文件修改时间失败: " << e.what() << endl;
+        this->errmsg = "获取文件修改时间失败: "+ static_cast<std::string>(e.what());
         return false;
     }
 
@@ -85,7 +86,8 @@ bool ftpClient::getFileSize(const string &remoteFilename)
     }
     catch (const curlpp::RuntimeError &e)
     {
-        cerr << "请求失败: " << e.what() << endl;
+        cerr << "获取文件大小失败: " << e.what() << endl;
+        this->errmsg = "获取文件大小失败: "+ static_cast<std::string>(e.what());
         return false;
     }
 
@@ -134,7 +136,8 @@ bool ftpClient::mkdir(const string &remoteDirname)
     }
     catch (const curlpp::RuntimeError &e)
     {
-        cerr << "请求失败: " << e.what() << endl;
+        cerr << "创建目录失败: " << e.what() << endl;
+        this->errmsg = "创建目录失败: "+ static_cast<std::string>(e.what());
         return false;
     }
     return true;
@@ -204,6 +207,7 @@ bool ftpClient::rmdir(const string &remoteDirname)
     catch (const curlpp::RuntimeError &e)
     {
         cerr << "删除目录失败: " << e.what() << endl;
+        this->errmsg = "删除目录失败: "+ static_cast<std::string>(e.what());
         return false;
     }
     return true;
@@ -234,6 +238,7 @@ bool ftpClient::rmfile(const string &remoteFilename)
     catch (const curlpp::RuntimeError &e)
     {
         cerr << "删除文件失败: " << e.what() << endl;
+        this->errmsg = "删除文件失败: "+ static_cast<std::string>(e.what());
         return false;
     }
     return true;
@@ -266,6 +271,7 @@ bool ftpClient::rename(const string &oldname, const string &newname)
     catch (const curlpp::RuntimeError &e)
     {
         cerr << "重命名文件失败: " << e.what() << endl;
+        this->errmsg = "重命名文件失败: "+ static_cast<std::string>(e.what());
         return false;
     }
     return true;
@@ -296,6 +302,7 @@ bool ftpClient::nlist(const string &remoteDirname, vector<string> &list)
     catch (const curlpp::RuntimeError &e)
     {
         cerr << "获取文件列表失败: " << e.what() << endl;
+        this->errmsg = "获取文件列表失败: "+ static_cast<std::string>(e.what());
         return false;
     }
     // 将ostring流中的文件列表转换为istringstream，不然不可读
@@ -342,6 +349,7 @@ bool ftpClient::site(const string &cmd)
             return true;
         }
         std::cerr << "SITE执行失败: " << e.what() << std::endl;
+        this->errmsg = "SITE执行失败: "+ static_cast<std::string>(e.what());
         return false;
     }
     return true;
@@ -401,6 +409,7 @@ bool ftpClient::download(const string &remoteFilename, const string &localFilena
     catch (const curlpp::RuntimeError &e)
     {
         cerr << "下载文件失败: " << e.what() << endl;
+        this->errmsg = "下载文件失败: "+ static_cast<std::string>(e.what());
         downl.close();
         // 删除临时文件
         deletefile(tempfile);
@@ -479,6 +488,7 @@ bool ftpClient::upload(const string &localFilename, const string &remoteFilename
     catch (const curlpp::RuntimeError &e)
     {
         cerr << "上传文件失败: " << e.what() << endl;
+        this->errmsg = "上传文件失败: "+ static_cast<std::string>(e.what());
         // 关闭本地文件
         upl.close();
         // 删除临时文件

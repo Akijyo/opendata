@@ -1,4 +1,5 @@
 #include "../include/procheart.h"
+#include <csignal>
 #include <cstring>
 #include <ctime>
 #include <sys/ipc.h>
@@ -98,5 +99,19 @@ procHeart::~procHeart()
     {
         // 解除共享内存绑定
         shmdt(this->shmp);
+    }
+}
+
+
+//////
+void closeiosignal(bool io)
+{
+    for(int i=0;i<64;i++)
+    {
+        if (io)
+        {
+            close(i);
+        }
+        signal(i, SIG_IGN);
     }
 }

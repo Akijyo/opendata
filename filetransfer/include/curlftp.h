@@ -1,3 +1,4 @@
+#pragma once
 #include "ifilefransfer.h"
 #include <ctime>
 #include <curlpp/cURLpp.hpp>
