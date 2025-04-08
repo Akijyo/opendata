@@ -8,7 +8,7 @@ TcpServer::TcpServer()
     this->fd = socket(AF_INET, SOCK_STREAM, 0);
     if (this->fd == -1)
     {
-        cout << "套接字创建失败" << endl;
+        // cout << "套接字创建失败" << endl;
     }
     // 忽略 SIGPIPE 信号
     signal(SIGPIPE, SIG_IGN);
@@ -34,7 +34,7 @@ TcpServer::~TcpServer()
     }
     unique_lock<shared_mutex> lock(this->clientMap_mtx);
     {
-        for (auto &it : this->client_map)//释放client_map中的所有资源
+        for (auto &it : this->client_map) // 释放client_map中的所有资源
         {
             close(it.second->cfd);
         }
@@ -52,31 +52,31 @@ bool TcpServer::createListen(unsigned short port)
     // 2.绑定本地IP和端口
     if (bind(this->fd, (sockaddr *)&caddr, sizeof(caddr)) == -1)
     {
-        cout << "绑定失败" << endl;
+        // cout << "绑定失败" << endl;
         return false;
     }
     else
     {
-        cout << "绑定成功,IP:" << inet_ntoa(caddr.sin_addr) << ", port:" << ntohs(caddr.sin_port) << endl;
+        // cout << "绑定成功,IP:" << inet_ntoa(caddr.sin_addr) << ", port:" << ntohs(caddr.sin_port) << endl;
     }
 
     // 3.监听来自客户端的套接字
     if (listen(this->fd, 128) == -1)
     {
-        cout << "监听失败" << endl;
+        // cout << "监听失败" << endl;
         return false;
     }
     else
     {
-        cout << "套接字监听成功" << endl;
+        // cout << "套接字监听成功" << endl;
     }
     // 4.将监听套接字加入到epoll监听中
     struct epoll_event ev;
-    ev.events = EPOLLIN | EPOLLET;//边缘触发模式
+    ev.events = EPOLLIN | EPOLLET; // 边缘触发模式
     ev.data.fd = this->fd;
     if (epoll_ctl(this->epfd, EPOLL_CTL_ADD, this->fd, &ev) == -1)
     {
-        cout << "监听描述符添加epoll失败" << endl;
+        // cout << "监听描述符添加epoll失败" << endl;
         return false;
     }
     return true;
@@ -104,7 +104,7 @@ bool TcpServer::epollSocket(ThreadPool *pool, function<void *(shared_ptr<clientN
         int num = epoll_wait(this->epfd, events, size, -1);
         if (num == -1)
         {
-            cout << "epoll监听失败" << endl;
+            // cout << "epoll监听失败" << endl;
             return false;
         }
         // 2. 遍历监听到的描述符
@@ -130,7 +130,7 @@ bool TcpServer::epollSocket(ThreadPool *pool, function<void *(shared_ptr<clientN
                     // 查找连接描述符，一致性检查，以client_map为准
                     if (this->client_map.find(curfd) == this->client_map.end())
                     {
-                        cout << "未找到连接描述符" << endl;
+                        // cout << "未找到连接描述符" << endl;
                         continue;
                     }
                     else
@@ -165,9 +165,9 @@ bool TcpServer::heartbeatThread(const int time)
             unique_lock<shared_mutex> lock(this->clientMap_mtx);
             for (auto it = this->client_map.begin(); it != this->client_map.end();)
             {
-                //计数+1
+                // 计数+1
                 it->second->addCount();
-                //如果计数超过3次，就断开连接
+                // 如果计数超过3次，就断开连接
                 if (it->second->getCount() > 3)
                 {
                     cout << it->second->cfd << "（心跳包）客户端断开连接" << endl;
@@ -198,7 +198,7 @@ bool TcpServer::acceptConn()
     while (true)
     {
         int cfd = accept(this->fd, (sockaddr *)&caddr, &addrlen);
-        //非阻塞accept，如果没有连接请求，返回-1（失败），errno=EAGAIN或者EWOULDBLOCK
+        // 非阻塞accept，如果没有连接请求，返回-1（失败），errno=EAGAIN或者EWOULDBLOCK
         if (cfd == -1)
         {
             if (errno == EAGAIN || errno == EWOULDBLOCK)
@@ -207,7 +207,7 @@ bool TcpServer::acceptConn()
             }
             else
             {
-                cout << "等待客户端连接失败" << endl;
+                // cout << "等待客户端连接失败" << endl;
                 return false;
             }
         }
@@ -215,7 +215,7 @@ bool TcpServer::acceptConn()
         int flags = fcntl(cfd, F_GETFL, 0);
         fcntl(cfd, F_SETFL, flags | O_NONBLOCK);
         // 4.打印客户端连接信息
-        cout << "客户端连接成功,IP:" << inet_ntoa(caddr.sin_addr) << ", port:" << ntohs(caddr.sin_port) << endl;
+        // cout << "客户端连接成功,IP:" << inet_ntoa(caddr.sin_addr) << ", port:" << ntohs(caddr.sin_port) << endl;
         // 5.将客户端连接信息加入到client_map中
         shared_ptr<clientNode> client = make_shared<clientNode>(cfd);
         {
@@ -224,11 +224,11 @@ bool TcpServer::acceptConn()
         }
         // 6. 将连接描述符加入到epoll监听中
         struct epoll_event ev;
-        ev.events = EPOLLIN | EPOLLET;//边缘触发模式
+        ev.events = EPOLLIN | EPOLLET; // 边缘触发模式
         ev.data.fd = cfd;
         if (epoll_ctl(this->epfd, EPOLL_CTL_ADD, cfd, &ev) == -1)
         {
-            cout << "连接描述符添加epoll失败" << endl;
+            // cout << "连接描述符添加epoll失败" << endl;
             return false;
         }
     }
@@ -240,12 +240,12 @@ bool TcpServer::closeConn(shared_ptr<clientNode> client)
     // 从epoll监听中删除
     if (epoll_ctl(this->epfd, EPOLL_CTL_DEL, client->cfd, NULL) == -1)
     {
-        cout << "epoll删除连接描述符失败" << endl;
+        // cout << "epoll删除连接描述符失败" << endl;
         return false;
     }
     if (close(client->cfd) == -1)
     {
-        cout << "关闭连接失败" << endl;
+        // cout << "关闭连接失败" << endl;
         return false;
     }
     return true;
@@ -299,7 +299,7 @@ bool TcpServer::recvMsgWithType(string &msg, shared_ptr<clientNode> client, Mess
     int len;
     if (!this->readn(client->cfd, &len, sizeof(len)))
     {
-        cout << "接收消息长度失败" << endl;
+        // cout << "接收消息长度失败" << endl;
         return false;
     }
     len = ntohl(len); // 大端转小端
@@ -308,7 +308,7 @@ bool TcpServer::recvMsgWithType(string &msg, shared_ptr<clientNode> client, Mess
     char msgType;
     if (!this->readn(client->cfd, &msgType, sizeof(msgType)))
     {
-        cout << "接收消息类型失败" << endl;
+        // cout << "接收消息类型失败" << endl;
         return false;
     }
     this->charTOtype(msgType, type); // 将消息类型转换为枚举类型
@@ -321,7 +321,7 @@ bool TcpServer::recvMsgWithType(string &msg, shared_ptr<clientNode> client, Mess
     // 如果是&msg，传入的是string类型的引用(指针)，会和void*类型不匹配，从而报错。
     if (!this->readn(client->cfd, &msg[0], len - 1))
     {
-        cout << "接收消息内容失败" << endl;
+        // cout << "接收消息内容失败" << endl;
         return false;
     }
     return true;
@@ -358,7 +358,7 @@ bool TcpServer::recvMsgBin(void *buffer, std::shared_ptr<clientNode> client, Mes
     int len;
     if (!readn(client->cfd, &len, sizeof(len)))
     {
-        cout << "接收消息长度失败" << endl;
+        //cout << "接收消息长度失败" << endl;
         return false;
     }
     len = ntohl(len); // 大端转小端
@@ -366,14 +366,14 @@ bool TcpServer::recvMsgBin(void *buffer, std::shared_ptr<clientNode> client, Mes
     char msgType;
     if (!readn(client->cfd, &msgType, sizeof(msgType)))
     {
-        cout << "接收消息类型失败" << endl;
+        //cout << "接收消息类型失败" << endl;
         return false;
     }
     this->charTOtype(msgType, type); // 将消息类型转换为枚举类型
     // 3.接收消息内容
     if (!readn(client->cfd, buffer, len - 1))
     {
-        cout << "接收消息内容失败" << endl;
+        //cout << "接收消息内容失败" << endl;
         return false;
     }
     return true;

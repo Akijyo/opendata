@@ -38,7 +38,7 @@ void EXIT(int sig);
 // 处理通讯的核心回调函数
 void handle(shared_ptr<clientNode> client);
 // 处理客户端登录的函数，也就是接收客户端参数
-void clientLogin(shared_ptr<clientNode> client, argss &fileConnect, string &msg);
+void clientLogin(shared_ptr<clientNode> client, string &msg);
 // 接收客户端上传文件的核心处理函数
 void clientFileTop(shared_ptr<clientNode> client, string &msg);
 
@@ -83,10 +83,11 @@ void handle(shared_ptr<clientNode> client)
     {
         // 接收消息
         MessageType type;
-        string msg;
-        server.recvMsgWithType(msg, client, type);
-        lg.writeLine("接收到来着客户端%d的信息:%s", client->cfd, msg.c_str());
-        argss fileConnect;
+        // 开辟一段内存10240字节
+        char buffer[10240] = {0};
+        // 接收客户端消息
+        server.recvMsgBin(buffer, client, type);
+
         // 心跳包的处理逻辑
         if (type == MessageType::Heart)
         {
@@ -99,21 +100,28 @@ void handle(shared_ptr<clientNode> client)
         // 客户端传入参数的解析
         else if (type == MessageType::Login)
         {
+            string msg(buffer);
+            msg.shrink_to_fit();
+            lg.writeLine("接收到来着客户端%d的信息:%s", client->cfd, msg.c_str());
             // string msgStr(static_cast<char *>(msg));
-            clientLogin(client, fileConnect, msg);
+            clientLogin(client, msg);
         }
         // 解析文件报头
         else if (type == MessageType::Top)
         {
+            string msg(buffer);
+            msg.shrink_to_fit();
+            lg.writeLine("接收到来着客户端%d的信息:%s", client->cfd, msg.c_str());
             // string msgStr(static_cast<char *>(msg));
             clientFileTop(client, msg);
         }
     }
 }
 
-void clientLogin(shared_ptr<clientNode> client, argss &fileConnect, string &msg)
+void clientLogin(shared_ptr<clientNode> client, string &msg)
 {
     nlohmann::json loginJson;
+    argss fileConnect;
     // 解析json字符串
     try
     {
@@ -132,8 +140,7 @@ void clientLogin(shared_ptr<clientNode> client, argss &fileConnect, string &msg)
     mapMtx.unlock();
     // 发送登录成功的消息
     string loginStr = "login success";
-    server.sendMsgWithType(client, loginStr, MessageType::Login);
-    lg.writeLine("接收客户端的登录报文:%s", msg.c_str());
+    server.sendMsgBin(client, &loginStr[0], loginStr.size(), MessageType::Login);
 }
 
 void clientFileTop(shared_ptr<clientNode> client, string &msg)
@@ -160,7 +167,6 @@ void clientFileTop(shared_ptr<clientNode> client, string &msg)
     clientArgsMap[client].modify_time = modify_time;
     clientArgsMap[client].filesize = filesize;
     mapMtx.unlock();
-    lg.writeLine("接收客户端的文件报头:%s", msg);
 }
 
 void clearMap()

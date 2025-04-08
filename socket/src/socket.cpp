@@ -102,7 +102,7 @@ bool Socket::sendn(int fd, void *buffer, size_t n)
             {
                 continue;
             }
-            cout << "发送消息失败" << endl;
+            //cout << "发送消息失败" << endl;
             return false;
         }
         total += ret;

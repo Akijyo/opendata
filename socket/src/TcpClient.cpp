@@ -6,7 +6,7 @@ TcpClient::TcpClient()
     this->cfd = socket(AF_INET, SOCK_STREAM, 0); // 创建通信套接字
     if (this->cfd == -1)
     {
-        cout << "创建通信套接字失败" << endl;
+        // cout << "创建通信套接字失败" << endl;
     }
     // 忽略 SIGPIPE 信号
     signal(SIGPIPE, SIG_IGN);
@@ -15,7 +15,7 @@ TcpClient::TcpClient()
     this->count = 0;
 
     // 设置非阻塞
-    //this->setnonblocking(this->cfd);
+    // this->setnonblocking(this->cfd);
 }
 
 TcpClient::~TcpClient()
@@ -41,7 +41,7 @@ bool TcpClient::connectServer(string ip, unsigned short port)
     {
         if (errno != EINPROGRESS)
         {
-            cout << "连接失败" << endl;
+            // cout << "连接失败" << endl;
             return false;
         }
     }
@@ -52,7 +52,7 @@ bool TcpClient::connectServer(string ip, unsigned short port)
     poll(&fds, 1, -1);
     if (fds.revents != POLLOUT)
     {
-        cout << "连接失败" << endl;
+        // cout << "连接失败" << endl;
         return false;
     }
     return true;
@@ -105,7 +105,7 @@ bool TcpClient::recvMsgWithType(string &msg, MessageType &type)
     int len;
     if (!this->readn(this->cfd, &len, sizeof(len)))
     {
-        cout << "接收消息长度失败" << endl;
+        // cout << "接收消息长度失败" << endl;
         return false;
     }
     len = ntohl(len); // 大端转小端
@@ -114,7 +114,7 @@ bool TcpClient::recvMsgWithType(string &msg, MessageType &type)
     char msgType;
     if (!this->readn(this->cfd, &msgType, sizeof(msgType)))
     {
-        cout << "接收消息类型失败" << endl;
+        // cout << "接收消息类型失败" << endl;
         return false;
     }
     this->charTOtype(msgType, type); // 将消息类型转换为枚举类型
@@ -127,7 +127,7 @@ bool TcpClient::recvMsgWithType(string &msg, MessageType &type)
     // 如果是&msg，传入的是string类型的引用(指针)，会和void*类型不匹配，从而报错。
     if (!this->readn(this->cfd, &msg[0], len - 1))
     {
-        cout << "接收消息内容失败" << endl;
+        // cout << "接收消息内容失败" << endl;
         return false;
     }
     return true;
@@ -164,7 +164,7 @@ bool TcpClient::recvMsgBin(void *buffer, MessageType &type)
     int len;
     if (!this->readn(this->cfd, &len, sizeof(len)))
     {
-        cout << "接收消息长度失败" << endl;
+        //cout << "接收消息长度失败" << endl;
         return false;
     }
     len = ntohl(len); // 大端转小端
@@ -172,14 +172,14 @@ bool TcpClient::recvMsgBin(void *buffer, MessageType &type)
     char msgType;
     if (!this->readn(this->cfd, &msgType, sizeof(msgType)))
     {
-        cout << "接收消息类型失败" << endl;
+        //cout << "接收消息类型失败" << endl;
         return false;
     }
     this->charTOtype(msgType, type); // 将消息类型转换为枚举类型
     // 3.接收消息内容
     if (!this->readn(this->cfd, buffer, len - 1))
     {
-        cout << "接收消息内容失败" << endl;
+        //cout << "接收消息内容失败" << endl;
         return false;
     }
     return true;

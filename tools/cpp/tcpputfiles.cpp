@@ -6,7 +6,6 @@
 #include "procheart/include/procheart.h"
 #include "stringop/include/jsonns.h"
 #include <nlohmann/json.hpp>
-#include <type_traits>
 using namespace std;
 // 创建日志文件对象
 logfile lg;
@@ -140,7 +139,7 @@ bool login()
         return false;
     }
     lg.writeLine("登录成功，服务端返回的消息:%s", msg.c_str());
-    lg.writeLine("登录成功,ip:%s,port:%s", fileConnect.ip.c_str(), fileConnect.port);
+    lg.writeLine("登录成功,ip:%s,port:%d", fileConnect.ip.c_str(), fileConnect.port);
     client.resetCount();
     return true;
 }
@@ -161,7 +160,7 @@ bool uploadFile()
         string fileStr = fileJson.dump();
         lg.writeLine("filestr:%s", fileStr.c_str());
         // 发送文件报头
-        if (!client.sendMsgWithType(fileStr.data(), MessageType::Top))
+        if (!client.sendMsgWithType(fileStr, MessageType::Top))
         {
             lg.writeLine("发送文件报头失败");
             return false;
