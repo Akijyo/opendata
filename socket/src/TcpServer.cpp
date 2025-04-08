@@ -265,7 +265,8 @@ bool TcpServer::sendMsgWithType(shared_ptr<clientNode> client, string msg, Messa
     // 1.小端转大端，长度为信息大小+信息类型的大小
     int len = htonl(msg.size() + 1);
     // 2.获取消息类型
-    char msgType = (type == MessageType::Heart) ? 'H' : 'D';
+    char msgType;
+    this->typeTOchar(type, msgType);
     // 3.定义完整的发送缓冲区
     string buffer;
     buffer.reserve(sizeof(len) + sizeof(msgType) + msg.size());
@@ -310,7 +311,7 @@ bool TcpServer::recvMsgWithType(string &msg, shared_ptr<clientNode> client, Mess
         cout << "接收消息类型失败" << endl;
         return false;
     }
-    type = (msgType == 'H') ? MessageType::Heart : MessageType::Data;
+    this->charTOtype(msgType, type); // 将消息类型转换为枚举类型
 
     // 3.接收消息内容
     msg.resize(len - 1);
@@ -334,7 +335,8 @@ bool TcpServer::sendMsgBin(shared_ptr<clientNode> client, void *msg, size_t n, M
     // 1.小端转大端，长度为信息大小+信息类型的大小
     int len = htonl(n + 1);
     // 2.获取消息类型
-    char msgType = (type == MessageType::Heart) ? 'H' : 'D';
+    char msgType;
+    this->typeTOchar(type, msgType);
     // 3.定义完整的发送缓冲区
     string buffer;
     buffer.reserve(sizeof(len) + sizeof(msgType) + n);
@@ -367,7 +369,7 @@ bool TcpServer::recvMsgBin(void *buffer, std::shared_ptr<clientNode> client, Mes
         cout << "接收消息类型失败" << endl;
         return false;
     }
-    type = (msgType == 'H') ? MessageType::Heart : MessageType::Data;
+    this->charTOtype(msgType, type); // 将消息类型转换为枚举类型
     // 3.接收消息内容
     if (!readn(client->cfd, buffer, len - 1))
     {

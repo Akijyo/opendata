@@ -33,7 +33,7 @@ clientNode::clientNode(int cfd)
 bool Socket::setnonblocking(int fd)
 {
     int flags = fcntl(fd, F_GETFL, 0);
-    if(fcntl(fd, F_SETFL, flags | O_NONBLOCK) == -1)
+    if (fcntl(fd, F_SETFL, flags | O_NONBLOCK) == -1)
     {
         return false;
     }
@@ -108,4 +108,44 @@ bool Socket::sendn(int fd, void *buffer, size_t n)
         total += ret;
     }
     return true;
+}
+
+void Socket::typeTOchar(MessageType type, char &msgType)
+{
+    if (type == MessageType::Heart)
+    {
+        msgType = 'H';
+    }
+    else if (type == MessageType::Login)
+    {
+        msgType = 'L';
+    }
+    else if (type == MessageType::Top)
+    {
+        msgType = 'T';
+    }
+    else
+    {
+        msgType = 'D';
+    }
+}
+
+void Socket::charTOtype(char msgType, MessageType &type)
+{
+    if (msgType == 'H')
+    {
+        type = MessageType::Heart;
+    }
+    else if (msgType == 'L')
+    {
+        type = MessageType::Login;
+    }
+    else if (msgType == 'T')
+    {
+        type = MessageType::Top;
+    }
+    else
+    {
+        type = MessageType::Data;
+    }
 }

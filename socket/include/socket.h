@@ -8,7 +8,9 @@
 enum class MessageType
 {
     Heart, // 心跳包
-    Data   // 数据包
+    Login, // 登录
+    Top,   // 文件报头
+    Data //字符串数据
 };
 
 // 定义基本的客户端结构体
@@ -46,4 +48,8 @@ class Socket
 
     // 写n个字节，用于ET模式
     bool sendn(int fd, void *buf, size_t n);
+
+    // 解析消息类型
+    void typeTOchar(MessageType type, char &msgType);
+    void charTOtype(char msgType, MessageType &type);
 };

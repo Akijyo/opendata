@@ -49,6 +49,9 @@ class ftpInfo
 };
 ftpInfo ftpConnect; // 定义全局变量
 
+// 处理2,15信号的退出
+void EXIT(int sig);
+
 // 为ftpConnect全局变量赋值
 bool getFtpInfo(jsonns &js);
 
@@ -79,6 +82,8 @@ int main(int argc, char *argv[])
         return 0;
     }
     closeiosignal(false);
+    signal(2, EXIT);
+    signal(15, EXIT);
 
     // 打开日志文件
     if (!lg.open(argv[1], ios::out | ios::app))
@@ -371,4 +376,9 @@ void help()
     cout << "ischeck: 是否检查文件是否被修改，如果没有修改，且已经下载过（在finished中），则不下载" << endl;
     cout << "phtimeout: 进程心跳时间，单位秒，默认30秒" << endl;
     cout << "注意：json文件中所有路径都必须是绝对路径" << endl;
+}
+
+void EXIT(int sig)
+{
+    exit(0);
 }

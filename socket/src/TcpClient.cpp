@@ -15,7 +15,7 @@ TcpClient::TcpClient()
     this->count = 0;
 
     // 设置非阻塞
-    this->setnonblocking(this->cfd);
+    //this->setnonblocking(this->cfd);
 }
 
 TcpClient::~TcpClient()
@@ -71,7 +71,8 @@ bool TcpClient::sendMsgWithType(string msg, MessageType type)
     // 1.小端转大端，长度为信息大小+信息类型的大小
     int len = htonl(msg.size() + 1);
     // 2.获取消息类型
-    char msgType = (type == MessageType::Heart) ? 'H' : 'D';
+    char msgType;
+    this->typeTOchar(type, msgType);
     // 3.定义完整的发送缓冲区
     string buffer;
     buffer.reserve(sizeof(len) + sizeof(msgType) + msg.size());
@@ -116,7 +117,7 @@ bool TcpClient::recvMsgWithType(string &msg, MessageType &type)
         cout << "接收消息类型失败" << endl;
         return false;
     }
-    type = (msgType == 'H') ? MessageType::Heart : MessageType::Data;
+    this->charTOtype(msgType, type); // 将消息类型转换为枚举类型
 
     // 3.接收消息内容
     msg.resize(len - 1);
@@ -140,7 +141,8 @@ bool TcpClient::sendMsgBin(void *msg, size_t n, MessageType type)
     // 1.小端转大端，长度为信息大小+信息类型的大小
     int len = htonl(n + 1);
     // 2.获取消息类型
-    char msgType = (type == MessageType::Heart) ? 'H' : 'D';
+    char msgType;
+    this->typeTOchar(type, msgType);
     // 3.定义完整的发送缓冲区
     string buffer;
     buffer.reserve(sizeof(len) + sizeof(msgType) + n);
@@ -173,7 +175,7 @@ bool TcpClient::recvMsgBin(void *buffer, MessageType &type)
         cout << "接收消息类型失败" << endl;
         return false;
     }
-    type = (msgType == 'H') ? MessageType::Heart : MessageType::Data;
+    this->charTOtype(msgType, type); // 将消息类型转换为枚举类型
     // 3.接收消息内容
     if (!this->readn(this->cfd, buffer, len - 1))
     {

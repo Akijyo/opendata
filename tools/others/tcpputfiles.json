@@ -1,0 +1,13 @@
+{
+	"clientType": "1",
+	"ip": "127.0.0.1",
+	"port":8888,
+	"client_path": "/temp/output/surfdata/",
+	"server_path": "/temp/upload/",
+    "recursive": true,
+	"matchfile": ".*\\.json\\b",
+	"ptype":"1",
+	"backup_path":"/temp/backup/upload",
+	"timeval":"20",
+	"phtimeout":"180"
+}
