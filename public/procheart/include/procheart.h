@@ -24,6 +24,9 @@ class proInfo
 // 封装了更新进程心跳的类
 class procHeart
 {
+  private:
+    // 定义锁区保护updateHeart函数
+    std::mutex mtx;
   public:
     int shid;      // 共享内存ID
     int pos;       // 当前进程在共享内存数组中的位置

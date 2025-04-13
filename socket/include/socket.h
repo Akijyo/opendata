@@ -10,6 +10,7 @@ enum class MessageType
     Heart, // 心跳包
     Login, // 登录
     Top,   // 文件报头
+    File,  // 文件数据
     Data //字符串数据
 };
 

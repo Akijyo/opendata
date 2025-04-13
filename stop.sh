@@ -18,6 +18,9 @@ killall ftpgetfiles
 #停止上传文件程序
 killall ftpputfiles
 
+#停止TCP文件相关程序
+killall fileserver tcpgetfiles tcpputfiles
+
 sleep 5 
 
 killall -9 opendata
@@ -25,3 +28,4 @@ killall -9 deletefile
 killall -9 gzipfile
 killall -9 ftpgetfiles
 killall -9 ftpputfiles
+killall -9 fileserver tcpgetfiles tcpputfiles

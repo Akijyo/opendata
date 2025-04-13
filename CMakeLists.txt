@@ -10,6 +10,7 @@ include_directories(socket)
 include_directories(threadpool)
 include_directories(service)
 include_directories(filetransfer)
+include_directories(database)
 
 
 add_compile_options(-g -Wall)
@@ -19,6 +20,7 @@ link_directories(/usr/local/lib)
 
 link_libraries(curlpp)
 link_libraries(curl)
+link_libraries(mysqlclient)
 
 
 #编译main程序
@@ -29,9 +31,10 @@ file(GLOB_RECURSE SOCKET_CPP_FILE "${CMAKE_CURRENT_SOURCE_DIR}/socket/*.cpp")
 file(GLOB_RECURSE THREAD_CPP_FILE "${CMAKE_CURRENT_SOURCE_DIR}/threadpool/*.cpp")
 file(GLOB_RECURSE SERVICE_CPP_FILE "${CMAKE_CURRENT_SOURCE_DIR}/service/*.cpp")
 file(GLOB_RECURSE CFTP_CPP_FILE "${CMAKE_CURRENT_SOURCE_DIR}/cftp/*.cpp")
+file(GLOB_RECURSE DB_CPP_FILE "${CMAKE_CURRENT_SOURCE_DIR}/database/*.cpp")
 
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/bin)
-add_executable(opendata main.cpp ${PUBLIC_CPP_FILE} ${SOCKET_CPP_FILE} ${THREAD_CPP_FILE} ${SERVICE_CPP_FILE})
+add_executable(opendata main.cpp ${PUBLIC_CPP_FILE} ${SOCKET_CPP_FILE} ${THREAD_CPP_FILE} ${SERVICE_CPP_FILE}) ${DB_CPP_FILE})
 ]]
 
 #编译demo测试文件
@@ -42,6 +45,7 @@ file(GLOB_RECURSE PUBLIC_CPP_FILE "${CMAKE_CURRENT_SOURCE_DIR}/public/*.cpp")
 file(GLOB_RECURSE SOCKET_CPP_FILE "${CMAKE_CURRENT_SOURCE_DIR}/socket/*.cpp")
 file(GLOB_RECURSE THREAD_CPP_FILE "${CMAKE_CURRENT_SOURCE_DIR}/threadpool/*.cpp")
 file(GLOB_RECURSE CFTP_CPP_FILE "${CMAKE_CURRENT_SOURCE_DIR}/filetransfer/*.cpp")
+file(GLOB_RECURSE DB_CPP_FILE "${CMAKE_CURRENT_SOURCE_DIR}/database/*.cpp")
 
 
 #add_subdirectory(demo/stringopd)
@@ -49,7 +53,8 @@ file(GLOB_RECURSE CFTP_CPP_FILE "${CMAKE_CURRENT_SOURCE_DIR}/filetransfer/*.cpp"
 #add_subdirectory(demo/fileframed)
 #add_subdirectory(demo/socketd)
 #add_subdirectory(demo/procheart)
-add_subdirectory(demo/cftp)
+#add_subdirectory(demo/cftp)
+add_subdirectory(demo/databased)
 #]]
 
 

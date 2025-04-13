@@ -82,7 +82,10 @@ bool procHeart::updateHeart()
     {
         return false;
     }
+    // 互斥锁保护共享内存
+    this->mtx.lock();
     this->shmp[this->pos].lastHeart = time(0);
+    this->mtx.unlock();
     return true;
 }
 

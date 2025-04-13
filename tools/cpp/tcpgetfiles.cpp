@@ -7,6 +7,8 @@
 #include "include/socket.h"
 #include "procheart/include/procheart.h"
 #include "stringop/include/jsonns.h"
+#include "stringop/include/stringop.h"
+#include <cstddef>
 #include <cstring>
 #include <nlohmann/json.hpp>
 #include <unistd.h>
@@ -47,8 +49,8 @@ bool getArgs(string jsonfile);
 void sendHeartbeat();
 // 登录tcp服务器的函数，负责的是把程序的参数传给服务端，发送的是json格式的字符串
 bool login();
-// 上传文件的函数
-bool uploadFile();
+// 下载文件的函数
+bool download();
 
 int main(int argc, char *argv[])
 {
@@ -96,9 +98,9 @@ int main(int argc, char *argv[])
     }
 
     // 开启上传
-    if (!uploadFile())
+    if (!download())
     {
-        lg.writeLine("上传文件失败");
+        lg.writeLine("下载文件失败");
         return 0;
     }
     return 0;
@@ -160,126 +162,88 @@ bool login()
     return true;
 }
 
-bool uploadFile()
+bool download()
 {
-    cdir dir;
-    // 打开目录
-    dir.openDir(fileConnect.client_path, fileConnect.matchfile, 10000, fileConnect.recursive);
+    // 1.发送文件下载请求信息
+    // 2.解析可能是文件报头的内容
+    // 3.接收文件
+    // 4.判断接收完成结束循环
 
-    // 遍历目录中的每个文件
-    while (dir.readFile())
+    // 拼接发送文件下载请求信息
+    nlohmann::json fileJson;
+    fileJson["ptype"] = fileConnect.ptype;
+    if (fileConnect.ptype == 2)
     {
-        // 拼接传输的文件报头
-        nlohmann::json fileJson;
-        fileJson["filename"] = dir.fullpath;
-        fileJson["filetime"] = dir.modifytime;
-        fileJson["filesize"] = dir.filesize;
-        string fileStr = fileJson.dump();
+        fileJson["backup_path"] = fileConnect.backup_path;
+    }
+    fileJson["recursive"] = fileConnect.recursive;
+    fileJson["matchfile"] = fileConnect.matchfile;
+    string fileStr = fileJson.dump();
+    // 发送文件下载请求信息
+    if (!client.sendMsgWithType(fileStr, MessageType::File))
+    {
+        lg.writeLine("发送文件下载请求信息失败");
+        return false;
+    }
 
-        // 发送文件报头
-        if (!client.sendMsgWithType(fileStr, MessageType::Top))
+    string fullpath;
+    string modify_time;
+    int filesize;
+    char buffer[10240]; // 数据缓冲区
+
+    while (true)
+    {
+        memset(buffer, 0, sizeof(buffer));
+        MessageType type;
+        size_t size = 0;
+        if (!client.recvMsgBin(buffer, type, size))
         {
-            lg.writeLine("发送文件报头失败");
+            lg.writeLine("接收文件失败");
             return false;
         }
-
-        // 接收报头确认，否则不开启下面程序
-        string topRecv;
-        MessageType topType;
-        if (!client.recvMsgWithType(topRecv, topType))
+        if (type == MessageType::Top)
         {
-            lg.writeLine("接收报头确认失败");
-            return false;
-        }
-        client.resetCount(); // 接收报头确认成功后，重置心跳包计数
-        if (topType != MessageType::Top || topRecv != "top ok")
-        {
-            lg.writeLine("接收报头确认失败");
-            return false;
-        }
-        lg.writeLine("接收报头确认成功:%s", topRecv.c_str());
-
-        // 发送文件-------------------------------------------------------------------
-        int onread = 0;     // 每次读取的字节数
-        char buffer[10000]; // 数据缓冲区
-        int total = 0;      // 已经读取的字节数
-
-        // 打开文件
-        rdfile file;
-        if (!file.open(dir.fullpath, ios::in | ios::binary))
-        {
-            lg.writeLine("打开文件失败");
-            return false;
-        }
-        lg.writeLine("发送文件%s(%d)...", dir.fullpath.c_str(), dir.filesize);
-        while (true)
-        {
-            memset(buffer, 0, sizeof(buffer));
-
-            // 将每次连接传输的大小控制在10000字节以下
-            if (dir.filesize - total >= 10000)
+            string msg(buffer);
+            msg.shrink_to_fit();
+            // 解析文件报头
+            nlohmann::json fileJson;
+            // 解析json字符串
+            try
             {
-                onread = 10000;
+                fileJson = nlohmann::json::parse(msg);
             }
-            else
+            catch (const std::exception &e)
             {
-                onread = dir.filesize - total;
-            }
-
-            // 读取文件内容
-            file.readBin(buffer, onread);
-
-            // 发送读取到的内容
-            if (!client.sendMsgBin(buffer, onread, MessageType::File))
-            {
-                lg.writeLine("发送文件失败");
+                lg.writeLine("解析json字符串失败:%s", e.what());
                 return false;
             }
+            // 获取文件的完整路径
+            fullpath = fileJson["filename"];
+            // 获取文件的修改时间
+            modify_time = fileJson["filetime"];
+            // 获取文件的大小
+            filesize = fileJson["filesize"];
 
-            // 接收文件确认，由于recv阻塞所以只有接收确认后才能继续发送
-            string recv;
-            MessageType type;
-            if (!client.recvMsgWithType(recv, type))
-            {
-                lg.writeLine("接收文件确认失败");
-                return false;
-            }
-            if (recv != "file ok")
-            {
-                lg.writeLine("接收文件确认失败");
-                return false;
-            }
-
-            // 记录已经读取的字节数
-            total += onread;
-            // 读取完毕，跳出循环下一个文件
-            if (total == dir.filesize)
-            {
-                break;
-            }
+            // 已经存在的文件删掉
+            string filefullpath = fullpath;
+            replaceStr(filefullpath, fileConnect.server_path, fileConnect.client_path, false);
+            deletefile(filefullpath);
         }
-        // 传输完成关闭文件
-        file.close();
-
-        // 根据ptype字段的值来决定传输完成后的处理方式
-        if (fileConnect.ptype == 1)
+        else if (type == MessageType::File)
         {
-            // 删除文件
-            if (!deletefile(dir.fullpath))
-            {
-                lg.writeLine("删除文件失败");
-                return false;
-            }
+            string filefullpath = fullpath;
+            replaceStr(filefullpath, fileConnect.server_path, fileConnect.client_path, false);
+            lg.writeLine("接收文件:%s,大小:%d", filefullpath.c_str(), size);
+            // 打开文件
+            wtfile file;
+            file.open(filefullpath, false, ios::out | ios::app | ios::binary);
+            file.writeBin(buffer, size);
+            file.close();
         }
-        else if (fileConnect.ptype == 2)
+        else if (type == MessageType::Data) // 结束循环
         {
-            // 备份文件
-            string backupFile = fileConnect.backup_path + dir.filename;
-            if (!renamefile(dir.fullpath, backupFile))
-            {
-                lg.writeLine("备份文件失败");
-                return false;
-            }
+            lg.writeLine("接收文件完成");
+            break;
         }
     }
     return true;
@@ -391,15 +355,15 @@ bool getArgs(string jsonfile)
 
 void help()
 {
-    cout << "Usage: tcpputfiles <logfile> <jsonfile>" << endl;
-    cout << "logfile：用于保存上传日志的文件" << endl;
+    cout << "Usage: tcpgetfiles <logfile> <jsonfile>" << endl;
+    cout << "logfile：用于保存下载日志的文件" << endl;
     cout << "jsonfile：用于保存程序传入参数的json文件" << endl;
-    cout << "Example: ./tcpputfiles /temp/log/tcpupload.log "
-            "/home/akijyo/桌面/code/c++/opendata/tools/others/tcpputfiles.json"
+    cout << "Example: ./tcpgetfiles /temp/log/tcpdownload.log "
+            "/home/akijyo/桌面/code/c++/opendata/tools/others/tcpgetfiles.json"
          << endl
          << endl;
     cout << "json文件应有的字段：" << endl;
-    cout << "clientType: 客户端类型，1.上传。2.下载。本程序默认1" << endl;
+    cout << "clientType: 客户端类型，1.上传。2.下载。本程序默认2" << endl;
     cout << "ip: 服务端ip地址" << endl;
     cout << "port: 服务端端口" << endl;
     cout << "client_path: 客户端文件传输的目录" << endl;

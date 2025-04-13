@@ -64,7 +64,10 @@ bool Socket::readn(int fd, void *buffer, size_t n)
             }
             if (errno == EAGAIN || errno == EWOULDBLOCK)
             {
-                continue;
+                // continue说明，非阻塞io不会因为收不到数据而返回false
+                // continue;
+                // 下面则反之
+                return false;
             }
         }
         else if (ret == 0)
@@ -102,7 +105,7 @@ bool Socket::sendn(int fd, void *buffer, size_t n)
             {
                 continue;
             }
-            //cout << "发送消息失败" << endl;
+            // cout << "发送消息失败" << endl;
             return false;
         }
         total += ret;
@@ -124,6 +127,10 @@ void Socket::typeTOchar(MessageType type, char &msgType)
     {
         msgType = 'T';
     }
+    else if (type == MessageType::File)
+    {
+        msgType = 'F';
+    }
     else
     {
         msgType = 'D';
@@ -143,6 +150,10 @@ void Socket::charTOtype(char msgType, MessageType &type)
     else if (msgType == 'T')
     {
         type = MessageType::Top;
+    }
+    else if (msgType == 'F')
+    {
+        type = MessageType::File;
     }
     else
     {

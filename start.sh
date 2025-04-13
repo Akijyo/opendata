@@ -23,3 +23,18 @@
 
 #定期清理/temp/upload目录下0.04天之前的文件
 /home/akijyo/桌面/code/c++/opendata/tools/bin/processctrl 300 /home/akijyo/桌面/code/c++/opendata/tools/bin/deletefile /temp/upload ".*" 0.04
+
+#启动TCP文件服务器
+/home/akijyo/桌面/code/c++/opendata/tools/bin/processctrl 20 /home/akijyo/桌面/code/c++/opendata/tools/bin/fileserver /temp/log/fileserver.log
+
+#启动TCP文件上传程序，把/temp/upload目录下的文件上传/temp/tcpupload目录下
+/home/akijyo/桌面/code/c++/opendata/tools/bin/processctrl 30 /home/akijyo/桌面/code/c++/opendata/tools/bin/tcpputfiles /temp/log/tcpupload.log /home/akijyo/桌面/code/c++/opendata/tools/others/tcpputfiles.json
+
+#启动TCP文件下载程序，把/idcdata/surfdata目录下的文件下载到/idcdata/tcpsurfdata目录下
+/home/akijyo/桌面/code/c++/opendata/tools/bin/processctrl 30 /home/akijyo/桌面/code/c++/opendata/tools/bin/tcpgetfiles /temp/log/tcpdownload.log /home/akijyo/桌面/code/c++/opendata/tools/others/tcpgetfiles.json
+
+#定期清理/temp/tcpupload目录下0.04天之前的文件
+/home/akijyo/桌面/code/c++/opendata/tools/bin/processctrl 300 /home/akijyo/桌面/code/c++/opendata/tools/bin/deletefile /temp/tcpupload ".*" 0.04
+
+#定期清理/idcdata/tcpsurfdata目录下0.04天之前的文件
+/home/akijyo/桌面/code/c++/opendata/tools/bin/processctrl 300 /home/akijyo/桌面/code/c++/opendata/tools/bin/deletefile /idcdata/tcpsurfdata ".*" 0.04

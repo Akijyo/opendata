@@ -27,4 +27,7 @@ class TcpServer : public Socket
 
     // 接收二进制数据
     bool recvMsgBin(void *buffer, std::shared_ptr<clientNode> client, MessageType &type);
+
+    // 接受消息，二进制，同时提供获取大小的参数
+    bool recvMsgBin(void *buffer, std::shared_ptr<clientNode> client, MessageType &type, size_t &size);
 };

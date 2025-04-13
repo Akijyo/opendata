@@ -22,4 +22,6 @@ class TcpClient final : public client, public Socket
     bool sendMsgBin(void *msg, size_t n, MessageType type = MessageType::Data);
     // 接收消息，二进制
     bool recvMsgBin(void *buffer, MessageType &type);
+    // 接受消息，二进制，同时提供获取大小的参数
+    bool recvMsgBin(void *buffer, MessageType &type, size_t &size);
 };

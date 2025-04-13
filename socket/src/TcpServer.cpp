@@ -16,8 +16,7 @@ TcpServer::TcpServer()
     //******服务器端关闭连接，会产生SIGPIPE信号，导致主程序退出
 
     // 设置非阻塞
-    int flags = fcntl(this->fd, F_GETFL, 0);
-    fcntl(this->fd, F_SETFL, flags | O_NONBLOCK);
+    this->setnonblocking(this->fd);
     // 创建epoll描述符
     this->epfd = epoll_create(1);
 }
@@ -170,7 +169,7 @@ bool TcpServer::heartbeatThread(const int time)
                 // 如果计数超过3次，就断开连接
                 if (it->second->getCount() > 3)
                 {
-                    cout << it->second->cfd << "（心跳包）客户端断开连接" << endl;
+                    // cout << it->second->cfd << "（心跳包）客户端断开连接" << endl;
                     it->second->is_active = false;
                     it->second->is_working = false;
                     this->closeConn(it->second);
@@ -212,8 +211,7 @@ bool TcpServer::acceptConn()
             }
         }
         // 3.设置非阻塞
-        int flags = fcntl(cfd, F_GETFL, 0);
-        fcntl(cfd, F_SETFL, flags | O_NONBLOCK);
+        this->setnonblocking(cfd);
         // 4.打印客户端连接信息
         // cout << "客户端连接成功,IP:" << inet_ntoa(caddr.sin_addr) << ", port:" << ntohs(caddr.sin_port) << endl;
         // 5.将客户端连接信息加入到client_map中
@@ -358,7 +356,7 @@ bool TcpServer::recvMsgBin(void *buffer, std::shared_ptr<clientNode> client, Mes
     int len;
     if (!readn(client->cfd, &len, sizeof(len)))
     {
-        //cout << "接收消息长度失败" << endl;
+        // cout << "接收消息长度失败" << endl;
         return false;
     }
     len = ntohl(len); // 大端转小端
@@ -366,14 +364,42 @@ bool TcpServer::recvMsgBin(void *buffer, std::shared_ptr<clientNode> client, Mes
     char msgType;
     if (!readn(client->cfd, &msgType, sizeof(msgType)))
     {
-        //cout << "接收消息类型失败" << endl;
+        // cout << "接收消息类型失败" << endl;
         return false;
     }
     this->charTOtype(msgType, type); // 将消息类型转换为枚举类型
     // 3.接收消息内容
     if (!readn(client->cfd, buffer, len - 1))
     {
-        //cout << "接收消息内容失败" << endl;
+        // cout << "接收消息内容失败" << endl;
+        return false;
+    }
+    return true;
+}
+
+bool TcpServer::recvMsgBin(void *buffer, std::shared_ptr<clientNode> client, MessageType &type, size_t &size)
+{
+    // 1.接收消息长度
+    int len;
+    if (!readn(client->cfd, &len, sizeof(len)))
+    {
+        // cout << "接收消息长度失败" << endl;
+        return false;
+    }
+    len = ntohl(len); // 大端转小端
+    size = len - 1;   // 获取消息内容的大小
+    // 2.接收消息类型
+    char msgType;
+    if (!readn(client->cfd, &msgType, sizeof(msgType)))
+    {
+        // cout << "接收消息类型失败" << endl;
+        return false;
+    }
+    this->charTOtype(msgType, type); // 将消息类型转换为枚举类型
+    // 3.接收消息内容
+    if (!readn(client->cfd, buffer, len - 1))
+    {
+        // cout << "接收消息内容失败" << endl;
         return false;
     }
     return true;
