@@ -23,6 +23,10 @@
 #include "include/TcpClient.h"
 #include "include/TcpServer.h"
 
+#include "include/ConnectionPool.h"
+
+#include "include/curlftp.h"
+
 
 
 

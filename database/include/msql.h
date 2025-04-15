@@ -15,6 +15,7 @@ class mysql : public IConnection
     MYSQL_FIELD *fields = nullptr;          // 保存列名（字段名）的指针（数组）
     unsigned long *field_lengths = nullptr; // 保存那一行每一列的数据长度的指针（数组），用于取值时的string构造
     void build_column_map() override;       // 构建列名和列索引的映射
+
   public:
     mysql(); // 初始化mysql实例
     mysql(const mysql &) = delete;

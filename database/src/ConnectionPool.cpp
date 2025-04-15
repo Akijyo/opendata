@@ -1,9 +1,10 @@
 #include "../include/ConnectionPool.h"
 #include <fstream>
+#include <iostream>
 #include <memory>
 
 // 获取连接池对象,单例模式，私有化构造函数，只能通过该函数获取连接池对象，并且每次返回都是同一个地址，即同一个对象
-ConnectionPool *ConnectionPool::GetConnectionPool(std::string &file)
+ConnectionPool *ConnectionPool::GetConnectionPool(std::string file)
 {
     static ConnectionPool pool(file);
     return &pool;
@@ -99,14 +100,14 @@ std::shared_ptr<IConnection> ConnectionPool::getConnect()
         pool.push_back(*deleter);               // 将连接放回连接池
         busy_size--;
         (*deleter)->refreshTime();
-        this->consumer_cv.notify_one(); //
+        this->consumer_cv.notify_one();
     });
 
     producer_cv.notify_one();
     return returnConn;
 }
 
-ConnectionPool::ConnectionPool(std::string &file) // 初始化连接池
+ConnectionPool::ConnectionPool(std::string file) // 初始化连接池
 {
     // 解析json配置文件
     nlohmann::json config;
@@ -141,7 +142,7 @@ ConnectionPool::ConnectionPool(std::string &file) // 初始化连接池
 
 ConnectionPool::~ConnectionPool()
 {
-    std::cout << "析构函数开始" << std::endl;
+    //std::cout << "析构函数开始" << std::endl;
     stop = true;
     producer_cv.notify_all(); // 唤醒生产者线程,防止生产者线程阻塞无法回收
     consumer_cv.notify_all(); // 唤醒消费者线程,防止消费者线程阻塞无法回收
@@ -158,5 +159,5 @@ ConnectionPool::~ConnectionPool()
         std::shared_ptr<IConnection> connection = pool.front();
         pool.pop_front();
     }
-    std::cout << "析构函数结束" << std::endl;
+    //std::cout << "析构函数结束" << std::endl;
 }

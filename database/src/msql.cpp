@@ -24,7 +24,8 @@ mysql::mysql()
     this->aliveTime = std::chrono::steady_clock::now();
     if (this->con == nullptr)
     {
-        std::cerr << "mysql初始化出错" << std::endl;
+        this->last_errno_ = 0;
+        this->last_error_ = "MySQL initialization failed";
         return;
     }
 }
@@ -47,7 +48,8 @@ bool mysql::connect(const std::string host, const std::string user, const std::s
                              0); // 调用mysql_real_connect函数连接数据库
     if (con == nullptr)
     {
-        std::cerr << "连接出错" << std::endl;
+        this->last_errno_ = mysql_errno(con);
+        this->last_error_ = mysql_error(con);
         return false;
     }
     mysql_set_character_set(con, "utf8mb4"); // 设置连接使用的编码utf8
@@ -58,7 +60,8 @@ bool mysql::update(const std::string sql) // 执行增删改语句
 {
     if (mysql_query(this->con, sql.c_str()) != 0)
     {
-        std::cerr << "数据操控语句出错" << std::endl;
+        this->last_errno_ = mysql_errno(con);
+        this->last_error_ = mysql_error(con);
         return false;
     }
     return true;
@@ -73,7 +76,8 @@ bool mysql::query(const std::string sql)
     this->column_map.clear();                     // 清空原有的列名和列索引的映射
     if (mysql_query(this->con, sql.c_str()) != 0) // 执行查询语句
     {
-        std::cerr << "查询语句出错" << std::endl;
+        last_errno_ = mysql_errno(con);
+        last_error_ = mysql_error(con);
         return false;
     }
     this->res = mysql_store_result(this->con);      // 获取查询结果集
@@ -148,7 +152,7 @@ int mysql::get_int(int col)
     }
     catch (const std::exception &e)
     {
-        std::cerr << "转换int类型出错" << std::endl;
+        //std::cerr << "转换int类型出错" << std::endl;
         return 0;
     }
 }
@@ -158,7 +162,7 @@ double mysql::get_double(int col)
     auto value = this->value(col);
     if (value == nullopt)
     {
-        return 0;
+        return 0.0;
     }
     try
     {
@@ -166,8 +170,8 @@ double mysql::get_double(int col)
     }
     catch (const std::exception &e)
     {
-        std::cerr << "转换double类型出错" << std::endl;
-        return 0;
+        //std::cerr << "转换double类型出错" << std::endl;
+        return 0.0;
     }
 }
 
@@ -180,7 +184,7 @@ string mysql::column_name(int col)
 {
     if (col < 0 || col > this->num_fields)
     {
-        std::cerr << "列索引越界" << std::endl;
+        //std::cerr << "列索引越界" << std::endl;
         return "";
     }
     return this->fields[col].name;

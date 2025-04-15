@@ -8,8 +8,10 @@ list<st_stcode> stcodelist; // 存放站点参数的容器
 
 list<st_surfdata> surfdatalist; // 保存站点观测数据的列表
 
-extern logfile lg;
-
+// 创建日志对象的全局变量
+logfile lg;
+// 进程心跳
+procHeart mph;
 
 // 把站点文件参数加载到容器中
 bool loadstcode(const string &inifile)
@@ -44,12 +46,6 @@ bool loadstcode(const string &inifile)
         spl.getValue(5, stcode.alt);
         stcodelist.push_back(stcode);
     }
-
-    // for (auto &it : stcodelist)
-    // {
-    //     lg.writeLine("provname:%s, obtid:%s, obtname:%s, lat:%f, lon:%f, alt:%f\n", it.provname.c_str(),
-    //                  it.obtid.c_str(), it.obtname.c_str(), it.lat, it.lon, it.alt);
-    // }
     return true;
 }
 
@@ -78,13 +74,6 @@ void crtsurfdata()
         surfdata.vis = rand() % 10000 + 100000;
         surfdatalist.push_back(surfdata);
     }
-    // for (auto &it : surfdatalist)
-    // {
-    //     lg.writeLine("obtid:%s, datetime:%s, temperature:%d, pressure:%d, humidity:%d, winddir:%d, windspeed:%d, "
-    //                  "rain:%d, vis:%d\n",
-    //                  it.obtid.c_str(), it.datetime.c_str(), it.temperature, it.pressure, it.humidity, it.winddir,
-    //                  it.windspeed, it.rain, it.vis);
-    // }
 }
 
 // 将观测数据写入文件.json
@@ -127,4 +116,57 @@ void crtsurffile(const string &outpath)
     wf.close();
 
     lg.writeLine("生成文件：%s", filename.c_str());
+}
+
+void EXIT(int sig)
+{
+    lg.writeLine("程序被信号中断，sig=%d", sig);
+    exit(0);
+}
+
+int main(int argc, char *argv[])
+{
+    if (argc != 4)
+    {
+        cout << "usage: " << argv[0] << " <inifile> <outpath> <logfile>" << endl;
+        cout << "example:/home/akijyo/桌面/code/c++/opendata/tools/bin/processctrl 60 " << argv[0]
+             << " /data/stcode.ini /output/surdata /log/logfile.log" << endl;
+
+        cout << "inifile: 气象站点参数文件名" << endl;
+        cout << "outpath:气象站点数据文件存放的目录" << endl;
+        cout << "logfile:日志文件名" << endl;
+        cout << "---------------------------------------------------" << endl;
+        cout << "本程序用于解析气象站点参数，生成气象站点观测数据，并将数据写入文件中" << endl;
+        cout << "生成的观测数据文件格式一律为json格式" << endl;
+        return 0;
+    }
+    closeiosignal(true);
+
+    if (lg.open(argv[3]) == false)
+    {
+        cout << "打开日志文件失败" << endl;
+        return -1;
+    }
+
+    signal(SIGINT, EXIT);
+    signal(SIGTERM, EXIT);
+
+    mph.addProcInfo(getpid(), "agrv[0]", 10);
+
+    lg.writeLine("程序开始运行");
+
+    // 1.从站点参数文件中加载站点参数，存放在容器中
+    if (loadstcode(argv[1]) == false)
+    {
+        lg.writeLine("加载站点参数失败");
+        EXIT(-1);
+    }
+
+    // 2.根据站点参数，生成站点观测数据（随机数）
+    crtsurfdata();
+
+    // 3.将生成的站点观测数据写入到文件中
+    crtsurffile(argv[2]);
+
+    lg.writeLine("程序运行结束");
 }

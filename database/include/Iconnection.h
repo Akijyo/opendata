@@ -13,6 +13,10 @@ class IConnection:public std::enable_shared_from_this<IConnection>
     std::unordered_map<std::string, int> column_map; // 列名和列索引的映射，在后面用于按字段去查找值
     virtual void build_column_map() = 0;             // 构建列名和列索引的映射
   public:
+    // 错误处理
+    std::string last_error_;
+    int last_errno_ = 0;
+
     IConnection()
     {
         this->aliveTime = std::chrono::steady_clock::now();

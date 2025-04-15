@@ -13,7 +13,7 @@
 class ConnectionPool
 {
   private:
-    ConnectionPool(std::string &file); // 私有化构造函数,禁止外部创建对象,需要传入数据库的配置文件路径
+    ConnectionPool(std::string file); // 私有化构造函数,禁止外部创建对象,需要传入数据库的配置文件路径
 
     std::string host;                    // 主机地址
     std::string user;                    // 用户名
@@ -39,6 +39,6 @@ public:
     ~ConnectionPool(); // 析构函数
     ConnectionPool(const ConnectionPool &) = delete;
     ConnectionPool &operator=(const ConnectionPool &) = delete;
-    static ConnectionPool *GetConnectionPool(std::string &file); // 获取连接池对象,构造单例模式用的
+    static ConnectionPool *GetConnectionPool(std::string file); // 获取连接池对象,构造单例模式用的
     std::shared_ptr<IConnection> getConnect();          // 获取连接
 };

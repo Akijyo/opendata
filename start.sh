@@ -4,7 +4,7 @@
 /home/akijyo/桌面/code/c++/opendata/tools/bin/processctrl 10 /home/akijyo/桌面/code/c++/opendata/tools/bin/checkproc /temp/log/checkproc.log
 
 #生成站点观测数据，一分钟一次
-/home/akijyo/桌面/code/c++/opendata/tools/bin/processctrl 60 /home/akijyo/桌面/code/c++/opendata/bin/opendata /temp/data/数据集合/01中国气象站点数据/中国气象站点参数.ini /temp/output/surfdata /temp/log/mylog.log
+/home/akijyo/桌面/code/c++/opendata/tools/bin/processctrl 60 /home/akijyo/桌面/code/c++/opendata/bin/crtsurfdata /temp/data/数据集合/01中国气象站点数据/中国气象站点参数.ini /temp/output/surfdata /temp/log/mylog.log
 
 #定期清理一次文件，五分钟一次，只保留0.02天的文件
 /home/akijyo/桌面/code/c++/opendata/tools/bin/processctrl 300 /home/akijyo/桌面/code/c++/opendata/tools/bin/deletefile /temp/output/surfdata ".*" 0.02
@@ -38,3 +38,13 @@
 
 #定期清理/idcdata/tcpsurfdata目录下0.04天之前的文件
 /home/akijyo/桌面/code/c++/opendata/tools/bin/processctrl 300 /home/akijyo/桌面/code/c++/opendata/tools/bin/deletefile /idcdata/tcpsurfdata ".*" 0.04
+
+#定期将站点参数文件内容更新到数据库中
+/home/akijyo/桌面/code/c++/opendata/tools/bin/processctrl 180 /home/akijyo/桌面/code/c++/opendata/bin/obtcodetodb /temp/data/数据集合/01中国气象站点数据/中国气象站点参数.ini /home/akijyo/桌面/code/c++/opendata/database/dbsettings.json /temp/log/obtcodetodb.log
+
+#定期将站点观测数据文件内容更新到数据库中，程序生成的观测数据文件最终会运送到/idcdata/tcpsurfdata(下载操作)，入库程序每运行一次都会把目录下已经处理的文件清空
+/home/akijyo/桌面/code/c++/opendata/tools/bin/processctrl 20 /home/akijyo/桌面/code/c++/opendata/bin/obtmindtodb /idcdata/tcpsurfdata /home/akijyo/桌面/code/c++/opendata/database/dbsettings.json /temp/log/obtmindtodb.log
+
+# 定期清理数据库中两小时前的数据，shell脚本obtmindtodb.sh里面利用linux的mysql客户端执行了/home/akijyo/桌面/code/c++/opendata/service/obtmindtodb/目录下的deletetable.sql文件，
+# 里面的语句DELETE FROM T_ZHOBTMIND WHERE ddatetime < DATE_SUB(NOW(), INTERVAL 2 HOUR);会删除表T_ZHOBTMIND中两小时前的数据
+/home/akijyo/桌面/code/c++/opendata/tools/bin/processctrl 360 /home/akijyo/桌面/code/c++/opendata/service/obtmindtodb/obtmindtodb.sh

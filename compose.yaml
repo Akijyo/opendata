@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0.41-debian
+    container_name: mysql-container
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: 13690919281qq  # 必须修改的root密码
+      MYSQL_DATABASE: idc         # 可选：初始化创建数据库
+    ports:
+      - "3307:3306"
+    volumes:
+       - /temp/database/mysql/mysql_data:/var/lib/mysql                # 数据持久化
+       - /temp/database/mysql/mysql_conf:/etc/mysql/conf.d  # 配置文件持久化
+    command: 
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --default-time-zone=+08:00  # 设置默认时区
+    networks:
+      - mynet
+
+networks:
+  mynet:
+    driver: bridge
