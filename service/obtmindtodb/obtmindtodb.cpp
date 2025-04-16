@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
     }
     closeiosignal(false);
 
-    if (lg.open(argv[3]) == false)
+    if (lg.open(argv[3],ios::out|ios::app) == false)
     {
         cout << "打开日志文件失败" << endl;
         return -1;

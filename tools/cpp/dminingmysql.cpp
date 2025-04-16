@@ -1,17 +1,72 @@
 #include "cpublic.h"
+#include "fileframe/include/fileio.h"
 #include "fileframe/include/logfile.h"
+#include "include/Iconnection.h"
+#include "include/msql.h"
 #include "procheart/include/procheart.h"
+#include "stringop/include/jsonns.h"
+#include "stringop/include/split.h"
+#include "stringop/include/stringop.h"
+#include "timeframe/include/timeframe.h"
+#include <nlohmann/json.hpp>
 
 using namespace std;
+
+// 程序参数的结构体
+class argss
+{
+  public:
+    string host;
+    int port;
+    string user;
+    string passwd;
+    string charset;
+    string db;
+
+    string selectsql;
+    string fieldstr;
+    string fieldtype;
+    string fieldlen;
+
+    string outpath;
+    string bfilename;
+    string efilename;
+
+    int maxcount;
+    string starttime;
+
+    string increfield;
+    string increfilename;
+
+    string host1;
+    int port1;
+    string user1;
+    string passwd1;
+    string db1;
+};
+argss starg;
+// 对fieldstr,fieldtype,fieldlen进行分割
+ccmdstr sfieldstr;
+ccmdstr sfieldtype;
+ccmdstr sfieldlen;
 
 // 创建日志文件对象
 logfile lg;
 // 创建进程心跳对象
 procHeart ph;
+// 进程心跳时间，单位秒
+int phtimeout;
+
 // 程序接受信号退出的函数
 void EXIT(int sig);
 // 程序的帮助文档
 void help();
+// 解析程序传入json格式的参数
+bool parseJson(const string &jsonfile);
+// 判断程序是否在可运行的时间区间
+bool isInTime(const string &starttime);
+// 数据抽取的主模块
+void dmingdata(shared_ptr<IConnection> connection);
 
 int main(int argc, char *argv[])
 {
@@ -33,7 +88,295 @@ int main(int argc, char *argv[])
         cout << "打开日志文件失败！" << endl;
         return 0;
     }
+
+    // 1.判断程序是否在运行区间
+    if (!isInTime(starg.starttime))
+    {
+        return 0;
+    }
+    // 2.连接数据库
+    shared_ptr<IConnection> connection = make_shared<mysql>();
+    if (!connection->connect(starg.host, starg.user, starg.passwd, starg.db, starg.port))
+    {
+        lg.writeLine("数据库连接失败：%s", connection->last_error_);
+        return 0;
+    }
+    // 3.数据抽取
+    dmingdata(connection);
+
     return 0;
+}
+
+// 判断程序是否在可运行的时间区间
+bool isInTime(const string &starttime)
+{
+    // 如果starttime为空，则表示不限制时间
+    if (starttime.empty())
+        return true;
+    // 获取当前时间的小时
+    string timeNow;
+    getCurTime(timeNow, TimeType::TIME_TYPE_SIXTEEN);
+    timeNow = timeNow.substr(0, 2);
+    // 如果当前时间的小时时间段不在在starttime中，则返回true
+    if (starttime.find(timeNow) == string::npos)
+        return false;
+    return true;
+}
+
+// 数据抽取的主模块
+void dmingdata(shared_ptr<IConnection> connection)
+{
+    // 3.1准备sql
+    string sql = starg.selectsql;
+    // 3.2执行sql语句
+    if (!connection->query(sql))
+    {
+        lg.writeLine("查询sql语句执行失败：%s", connection->last_error_);
+        return;
+    }
+    // 3.3获取sql执行结果
+    // 3.4将结果写入文件
+
+
+    // 获取文件时间戳
+    string filetime = getCurTime(TimeType::TIME_TYPE_TWO);
+    filetime += ":00";
+    pickNum(filetime);
+    // 定义文件序号
+    int fileindex = 1;
+
+    wtfile wf;
+    //定义跟json对象
+    nlohmann::json root;
+    while (true)
+    {
+        //获取查询结果的下一行
+        if (!connection->next())
+        {
+            return;
+        }
+        //打开文件
+        if (!wf.isOpen())
+        {
+            string fullFilePath = starg.outpath + "/" + starg.bfilename + "_" + filetime + "_" + starg.efilename + "_" +
+                          to_string(fileindex) + ".json";
+            // 打开文件
+            if (!wf.open(fullFilePath.c_str(), "w"))
+            {
+                lg.writeLine("打开文件失败：%s", fullFilePath.c_str());
+                return;
+            }
+        }
+        // 获取每个字段的值
+        nlohmann::json subarr;
+        for (int i = 0; i < sfieldstr.size(); i++)
+        {
+            if (sfieldtype[i] == "int")
+            {
+                int value = connection->get_int(i);
+                subarr[sfieldstr[i]] = value;
+            }
+            else if (sfieldtype[i] == "double"||sfieldtype[i] =="float")
+            {
+                double value = connection->get_double(i);
+                subarr[sfieldstr[i]] = value;
+            }
+            else if (sfieldtype[i] == "string")
+            {
+                string value = connection->value(i).value();
+                subarr[sfieldstr[i]] = value;
+            }
+            else
+            {
+                lg.writeLine("不支持的字段类型：%s", sfieldtype[i].c_str());
+                return;
+            }
+        }
+        root.push_back(subarr);
+        if(starg.maxcount!=0&&root.size()>=starg.maxcount)
+        {
+            //文件序号+1，为创建新文件做准备
+            fileindex++;
+            // 写入文件
+            wf << root.dump(4) << "\n";
+            // 清空json对象
+            root.clear();
+            // 关闭原有文件
+            wf.close();
+        }
+    }
+    // 将最后的数据写入文件
+    if (wf.isOpen())
+    {
+        wf << root.dump(4) << "\n";
+        wf.close();
+    }
+}
+
+bool parseJson(const string &jsonfile)
+{
+    // 读取json文件
+    jsonns js(jsonfile);
+
+    // 必需参数
+    if (!js.get("host", starg.host))
+    {
+        lg.writeLine("json文件中没有host字段");
+        return false;
+    }
+    if (!js.get("user", starg.user))
+    {
+        lg.writeLine("json文件中没有user字段");
+        return false;
+    }
+    if (!js.get("passwd", starg.passwd))
+    {
+        lg.writeLine("json文件中没有passwd字段");
+        return false;
+    }
+    if (!js.get("db", starg.db))
+    {
+        lg.writeLine("json文件中没有db字段");
+        return false;
+    }
+
+    // 可选参数，设置默认值
+    if (!js.get("port", starg.port))
+        starg.port = 3306;
+    if (!js.get("charset", starg.charset))
+        starg.charset = "utf8mb4";
+
+    // 必需参数
+    if (!js.get("selectsql", starg.selectsql))
+    {
+        lg.writeLine("json文件中没有selectsql字段");
+        return false;
+    }
+    if (!js.get("fieldstr", starg.fieldstr))
+    {
+        lg.writeLine("json文件中没有fieldstr字段");
+        return false;
+    }
+    if (!js.get("fieldtype", starg.fieldtype))
+    {
+        lg.writeLine("json文件中没有fieldtype字段");
+        return false;
+    }
+    if (!js.get("fieldlen", starg.fieldlen))
+    {
+        lg.writeLine("json文件中没有fieldlen字段");
+        return false;
+    }
+    sfieldstr.split(starg.fieldstr, ",");
+    sfieldtype.split(starg.fieldtype, ",");
+    sfieldlen.split(starg.fieldlen, ",");
+    if (sfieldstr.size() != sfieldtype.size() || sfieldstr.size() != sfieldlen.size())
+    {
+        lg.writeLine("json文件中fieldstr,fieldtype,fieldlen字段的个数不一致");
+        return false;
+    }
+
+    // 输出文件相关参数
+    if (!js.get("outpath", starg.outpath))
+    {
+        lg.writeLine("json文件中没有outpath字段");
+        return false;
+    }
+    if (!js.get("bfilename", starg.bfilename))
+    {
+        lg.writeLine("json文件中没有bfilename字段");
+        return false;
+    }
+    if (!js.get("efilename", starg.efilename))
+    {
+        lg.writeLine("json文件中没有efilename字段");
+        return false;
+    }
+
+    // 其他可选参数
+    if (!js.get("maxcount", starg.maxcount))
+        starg.maxcount = 0;
+    if (!js.get("starttime", starg.starttime))
+        starg.starttime = "";
+
+    // 增量抽取相关参数
+    // 增量抽取相关参数
+    if (!js.get("increfield", starg.increfield))
+        starg.increfield = "";
+    if (starg.increfield.empty() == false)
+    {
+        // 首先尝试获取 host1，因为它优先
+        bool hasHost1 = js.get("host1", starg.host1);
+
+        if (hasHost1)
+        {
+            // 如果有host1，则需要其他数据库连接参数
+            if (!js.get("user1", starg.user1))
+            {
+                lg.writeLine("json文件中没有user1字段");
+                return false;
+            }
+            if (!js.get("passwd1", starg.passwd1))
+            {
+                lg.writeLine("json文件中没有passwd1字段");
+                return false;
+            }
+            if (!js.get("port1", starg.port1))
+                starg.port1 = 3306;
+            if (!js.get("db1", starg.db1))
+            {
+                lg.writeLine("json文件中没有db1字段");
+                return false;
+            }
+        }
+        else
+        {
+            // 如果没有host1，则必须有increfilename
+            if (!js.get("increfilename", starg.increfilename))
+            {
+                lg.writeLine("增量抽取模式下，increfilename和host1参数必须二选一");
+                return false;
+            }
+        }
+    }
+
+    // 进程心跳超时参数
+    int timeout = 0;
+    if (!js.get("phtimeout", timeout))
+        timeout = 30; // 默认30秒
+
+    // 日志记录参数信息
+    lg.writeLine("host=%s", starg.host.c_str());
+    lg.writeLine("port=%d", starg.port);
+    lg.writeLine("user=%s", starg.user.c_str());
+    lg.writeLine("passwd=******");
+    lg.writeLine("charset=%s", starg.charset.c_str());
+    lg.writeLine("selectsql=%s", starg.selectsql.c_str());
+    lg.writeLine("fieldstr=%s", starg.fieldstr.c_str());
+    lg.writeLine("fieldlen=%s", starg.fieldlen.c_str());
+    lg.writeLine("outpath=%s", starg.outpath.c_str());
+    lg.writeLine("bfilename=%s", starg.bfilename.c_str());
+    lg.writeLine("efilename=%s", starg.efilename.c_str());
+    lg.writeLine("maxcount=%d", starg.maxcount);
+    lg.writeLine("starttime=%s", starg.starttime.c_str());
+
+    if (!starg.increfield.empty())
+    {
+        lg.writeLine("increfield=%s", starg.increfield.c_str());
+        lg.writeLine("increfilename=%s", starg.increfilename.c_str());
+
+        if (!starg.host1.empty())
+        {
+            lg.writeLine("host1=%s", starg.host1.c_str());
+            lg.writeLine("port1=%d", starg.port1);
+            lg.writeLine("user1=%s", starg.user1.c_str());
+            lg.writeLine("passwd1=******");
+        }
+    }
+
+    lg.writeLine("phtimeout=%d", timeout);
+
+    return true;
 }
 
 void help()
@@ -49,9 +392,12 @@ void help()
     cout << "host: 数据库地址。" << endl;
     cout << "user: 数据库用户。" << endl;
     cout << "passwd: 数据库密码。" << endl;
+    cout << "db: 数据库名。" << endl;
+    cout << "port: 数据库端口号，缺省3306。" << endl;
     cout << "charset: 数据库的字符集，这个参数要与数据源数据库保持一致，否则会出现乱码。" << endl;
     cout << "selectsql: 从数据库源数据库抽取数据的sql语句，如果是增量抽取，一定要用递增字段作为查询条件。" << endl;
     cout << "fieldstr: 抽取数据的sql语句输出结果集的字段名列表，中间用逗号分割，将作为json文件的字段名" << endl;
+    cout << "fieldtype: 抽数据的sql语句输出结果集的字段类型列表，字段类型是c/c++类型，且严格与fieldstr一一对应" << endl;
     cout << "fieldlen: 抽取数据的sql语句输出结果集字段的长度列表，中间用逗号分割。fieldstr与fieldlen的字段必须一一对应"
          << endl;
     cout << "outpath: 输出json文件存放的目录" << endl;
@@ -71,6 +417,8 @@ void help()
     cout << "host1: 已经抽取数据的递增字段最大值存放的数据库连接参数，该内容和increfilename二选一，该内容优先" << endl;
     cout << "user1: 同上，用户名" << endl;
     cout << "passwd1: 同上，密码" << endl;
+    cout << "db: 同上，数据库名。" << endl;
+    cout << "port1: 同上，端口，缺省3306。" << endl;
     cout << "phtimeout: 进程心跳时间，单位秒，默认30秒" << endl;
     cout << "注意：json文件中所有路径都必须是绝对路径" << endl;
 }

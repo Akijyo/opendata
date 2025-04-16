@@ -88,6 +88,17 @@ bool mysql::query(const std::string sql)
     return true;
 }
 
+bool mysql::set_charset(const std::string charset)
+{
+    if (mysql_set_character_set(this->con, charset.c_str()) != 0)
+    {
+        this->last_errno_ = mysql_errno(con);
+        this->last_error_ = mysql_error(con);
+        return false;
+    }
+    return true;
+}
+
 bool mysql::next()
 {
     if (this->res == nullptr)

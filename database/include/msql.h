@@ -27,6 +27,7 @@ class mysql : public IConnection
                  const unsigned int port) override; // 链接数据库
     bool update(const std::string sql) override;    // 执行增删改语句
     bool query(const std::string sql) override;     // 执行查询语句
+    bool set_charset(const std::string charset) override; // 设置字符集
 
     // 结果集处理操作
     bool next() override;            // 结果集导航，移动到下一行

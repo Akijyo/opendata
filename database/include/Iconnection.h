@@ -30,6 +30,7 @@ class IConnection:public std::enable_shared_from_this<IConnection>
                          const unsigned int port) = 0; // 链接数据库
     virtual bool update(const std::string sql) = 0;    // 执行增删改语句
     virtual bool query(const std::string sql) = 0;     // 执行查询语句
+    virtual bool set_charset(const std::string charset) = 0; // 设置字符集
 
     // 连接池时间操作
     void refreshTime() // 刷新时间

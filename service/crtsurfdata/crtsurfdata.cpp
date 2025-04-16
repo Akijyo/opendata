@@ -3,6 +3,7 @@
 生成的文件格式为json格式，保存在指定的目录中
 *********************************************************************************/
 #include "crtsurfdata.h"
+#include <ios>
 using namespace std;
 
 // 数据时间的字符串全局变量
@@ -146,7 +147,7 @@ int main(int argc, char *argv[])
     }
     closeiosignal(true);
 
-    if (lg.open(argv[3]) == false)
+    if (lg.open(argv[3],ios::out|ios::app) == false)
     {
         cout << "打开日志文件失败" << endl;
         return -1;
