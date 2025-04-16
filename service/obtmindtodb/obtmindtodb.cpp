@@ -1,3 +1,8 @@
+/*********************************************************************************
+本程序载入气象站点观测数据文件，并且将文件内容存入到数据库中
+由于数据量太大，数据只插入一次，有重复则不插入
+外置脚本会删除数据库中数据生成日期在系统时间2小时之前的数据
+*********************************************************************************/
 #include "obtmindtodb.h"
 #include "fileframe/include/cdir.h"
 #include "fileframe/include/fileframe.h"
@@ -88,6 +93,7 @@ void func(std::shared_ptr<IConnection> connection, const std::string &filedir)
         ifstream ifs(filename, ios::in);
         nlohmann::json js = nlohmann::json::parse(ifs);
         ifs.close();
+        connection->start_transaction();
         for (auto &subarr : js)
         {
             surfdata.obtid = subarr["obtid"];
@@ -113,6 +119,7 @@ void func(std::shared_ptr<IConnection> connection, const std::string &filedir)
                 ")";
             connection->update(sql);
         }
+        connection->commit();
         ph.updateHeart();
         double time = tc.endCount();
         lg.writeLine("处理文件：%s，记录数：%d，耗时：%.2f", filename.c_str(), js.size(), time);

@@ -3,4 +3,4 @@
 build/
 bin/
 demo/
-database/dbsettings.json
+*.json
