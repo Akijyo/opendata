@@ -21,6 +21,12 @@ killall ftpputfiles
 #停止TCP文件相关程序
 killall fileserver tcpgetfiles tcpputfiles
 
+#停止数据库更新相关程序
+killall obtcodetodb obtmindtodb obtmindtodb.sh
+
+#停止数据抽取程序
+killall dminingmysql
+
 sleep 5 
 
 killall -9 opendata
@@ -29,3 +35,5 @@ killall -9 gzipfile
 killall -9 ftpgetfiles
 killall -9 ftpputfiles
 killall -9 fileserver tcpgetfiles tcpputfiles
+killall -9 obtcodetodb obtmindtodb obtmindtodb.sh
+killall -9 dminingmysql

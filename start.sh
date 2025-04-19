@@ -48,3 +48,15 @@
 # 定期清理数据库中两小时前的数据，shell脚本obtmindtodb.sh里面利用linux的mysql客户端执行了/home/akijyo/桌面/code/c++/opendata/service/obtmindtodb/目录下的deletetable.sql文件，
 # 里面的语句DELETE FROM T_ZHOBTMIND WHERE ddatetime < DATE_SUB(NOW(), INTERVAL 2 HOUR);会删除表T_ZHOBTMIND中两小时前的数据
 /home/akijyo/桌面/code/c++/opendata/tools/bin/processctrl 360 /home/akijyo/桌面/code/c++/opendata/service/obtmindtodb/obtmindtodb.sh
+
+# 每隔一小时将T_ZHOBTCODE表中的数据抽出出来，放入/idcdata/dminddata/dmindcode目录下，使用全量抽取的方法
+/home/akijyo/桌面/code/c++/opendata/tools/bin/processctrl 3600 /home/akijyo/桌面/code/c++/opendata/tools/bin/dminingmysql /temp/log/dminingCode.log /home/akijyo/桌面/code/c++/opendata/tools/others/dminingCode.json
+
+# 每隔一分钟将T_ZHOBTMIND表中的数据抽出出来，放入/idcdata/dminddata/dmindmind目录下，使用增量抽取的方法，按照自增字段keyid递增值进行抽取
+/home/akijyo/桌面/code/c++/opendata/tools/bin/processctrl 60 /home/akijyo/桌面/code/c++/opendata/tools/bin/dminingmysql /temp/log/dminingMind.log /home/akijyo/桌面/code/c++/opendata/tools/others/dminingMind.json
+
+#定期清理/idcdata/dminddata/dmindcode目录下1天之前的文件
+/home/akijyo/桌面/code/c++/opendata/tools/bin/processctrl 300 /home/akijyo/桌面/code/c++/opendata/tools/bin/deletefile /idcdata/dminddata/dmindcode ".*\\.json\\b" 1
+
+#定期清理/idcdata/dminddata/dmindmind目录下0.06天之前的文件
+/home/akijyo/桌面/code/c++/opendata/tools/bin/processctrl 300 /home/akijyo/桌面/code/c++/opendata/tools/bin/deletefile /idcdata/dminddata/dmindmind ".*\\.json\\b" 0.06

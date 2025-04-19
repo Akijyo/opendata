@@ -7,12 +7,14 @@ include_directories(../public)
 include_directories(../socket)
 include_directories(../threadpool)
 include_directories(../filetransfer)
+include_directories(../database)
 
 link_directories(/usr/lib/x86_64-linux-gnu)
 link_directories(/usr/local/lib)
 
 link_libraries(curlpp)
 link_libraries(curl)
+link_libraries(mysqlclient)
 
 add_compile_options(-Wall -g)
 
@@ -21,7 +23,7 @@ file(GLOB_RECURSE PUBLIC_CPP_FILE "${CMAKE_CURRENT_SOURCE_DIR}/../public/*.cpp")
 file(GLOB_RECURSE SOCKET_CPP_FILE "${CMAKE_CURRENT_SOURCE_DIR}/../socket/*.cpp")
 file(GLOB_RECURSE THREAD_CPP_FILE "${CMAKE_CURRENT_SOURCE_DIR}/../threadpool/*.cpp")
 file(GLOB_RECURSE FILETRANSFER_CPP_FILE "${CMAKE_CURRENT_SOURCE_DIR}/../filetransfer/*.cpp")
-file(GLOB_RECURSE DB_CPP_FILE "${CMAKE_CURRENT_SOURCE_DIR}/database/*.cpp")
+file(GLOB_RECURSE DB_CPP_FILE "${CMAKE_CURRENT_SOURCE_DIR}/../database/*.cpp")
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
 
