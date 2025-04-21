@@ -1,13 +1,14 @@
 version: '3.8'
 
 services:
-  mysql:
+  mysql-master:
     image: mysql:8.0.41-debian
-    container_name: mysql-container
+    container_name: mysql-master
     restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: 13690919281qq  # 必须修改的root密码
       MYSQL_DATABASE: idc         # 可选：初始化创建数据库
+      TZ: Asia/Shanghai  # 添加时区环境变量
     ports:
       - "3307:3306"
     volumes:
@@ -16,10 +17,44 @@ services:
     command: 
       - --character-set-server=utf8mb4
       - --collation-server=utf8mb4_unicode_ci
-      - --default-time-zone=+08:00  # 设置默认时区
+      - --default-time-zone=+08:00  # 添加默认时区配置
+    networks:
+      - mynet
+    
+  mysql-slave:
+    image: mysql:8.0.41-debian
+    container_name: mysql-slave
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: 13690919281qq  # 必须修改的root密码
+      TZ: Asia/Shanghai  # 添加时区环境变量
+    ports:
+      - "3308:3306"
+    volumes:
+       - /temp/database/mysql-slave/mysql_data:/var/lib/mysql                # 数据持久化
+       - /temp/database/mysql-slave/mysql_conf:/etc/mysql/conf.d  # 配置文件持久化
+    command: 
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --default-time-zone=+08:00  # 添加默认时区配置
     networks:
       - mynet
 
 networks:
   mynet:
     driver: bridge
+#主从配置脚本：
+#主库：
+#CREATE USER 'replica'@'%' IDENTIFIED WITH mysql_native_password BY 'Replica@1234';
+#GRANT REPLICATION SLAVE ON *.* TO 'replica'@'%';
+#FLUSH PRIVILEGES;
+#SHOW MASTER STATUS; -- 记录File和Position
+#从库:
+#CHANGE MASTER TO
+#MASTER_HOST='mysql-master',
+#MASTER_USER='replica',
+#MASTER_PASSWORD='Replica@1234',
+#MASTER_AUTO_POSITION=1;
+
+#START SLAVE;
+#SHOW SLAVE STATUS\G  -- 验证Slave_IO_Running和Slave_SQL_Running状态

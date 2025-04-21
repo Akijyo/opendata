@@ -27,6 +27,9 @@ killall obtcodetodb obtmindtodb obtmindtodb.sh
 #停止数据抽取程序
 killall dminingmysql
 
+#停止数据入库模块
+killall jsontodb
+
 sleep 5 
 
 killall -9 opendata
@@ -37,3 +40,4 @@ killall -9 ftpputfiles
 killall -9 fileserver tcpgetfiles tcpputfiles
 killall -9 obtcodetodb obtmindtodb obtmindtodb.sh
 killall -9 dminingmysql
+killall -9 jsontodb

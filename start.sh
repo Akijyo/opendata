@@ -47,7 +47,7 @@
 
 # 定期清理数据库中两小时前的数据，shell脚本obtmindtodb.sh里面利用linux的mysql客户端执行了/home/akijyo/桌面/code/c++/opendata/service/obtmindtodb/目录下的deletetable.sql文件，
 # 里面的语句DELETE FROM T_ZHOBTMIND WHERE ddatetime < DATE_SUB(NOW(), INTERVAL 2 HOUR);会删除表T_ZHOBTMIND中两小时前的数据
-/home/akijyo/桌面/code/c++/opendata/tools/bin/processctrl 360 /home/akijyo/桌面/code/c++/opendata/service/obtmindtodb/obtmindtodb.sh
+#/home/akijyo/桌面/code/c++/opendata/tools/bin/processctrl 360 /home/akijyo/桌面/code/c++/opendata/service/obtmindtodb/obtmindtodb.sh
 
 # 每隔一小时将T_ZHOBTCODE表中的数据抽出出来，放入/idcdata/dminddata/dmindcode目录下，使用全量抽取的方法
 /home/akijyo/桌面/code/c++/opendata/tools/bin/processctrl 3600 /home/akijyo/桌面/code/c++/opendata/tools/bin/dminingmysql /temp/log/dminingCode.log /home/akijyo/桌面/code/c++/opendata/tools/others/dminingCode.json
@@ -60,3 +60,23 @@
 
 #定期清理/idcdata/dminddata/dmindmind目录下0.06天之前的文件
 /home/akijyo/桌面/code/c++/opendata/tools/bin/processctrl 300 /home/akijyo/桌面/code/c++/opendata/tools/bin/deletefile /idcdata/dminddata/dmindmind ".*\\.json\\b" 0.06
+
+#定期把数据抽取模块抽取出的数据（/idcdata/dminddata/dmindcode和/idcdata/dminddata/dmindmind目录下的文件）上传到/idcdata/jsontodb/vip目录下，以供数据入库模块入库
+/home/akijyo/桌面/code/c++/opendata/tools/bin/processctrl 20 /home/akijyo/桌面/code/c++/opendata/tools/bin/tcpputfiles /temp/log/tcpupload_code.log /home/akijyo/桌面/code/c++/opendata/tools/others/tcpputfiles_code.json
+/home/akijyo/桌面/code/c++/opendata/tools/bin/processctrl 20 /home/akijyo/桌面/code/c++/opendata/tools/bin/tcpputfiles /temp/log/tcpupload_mind.log /home/akijyo/桌面/code/c++/opendata/tools/others/tcpputfiles_mind.json
+
+#定期将/idcdata/jsontodb/vip目录下的数据入库到T_ZHOBTCODE1和T_ZHOBTMIND1表中
+/home/akijyo/桌面/code/c++/opendata/tools/bin/processctrl 20 /home/akijyo/桌面/code/c++/opendata/tools/bin/jsontodb /temp/log/jsontodb.log /home/akijyo/桌面/code/c++/opendata/tools/others/jsontodb.json
+
+#定期清理/idcdata/jsontodb/vipbak和/idcdata/jsontodb/viperr目录中0.02天之前的文件
+/home/akijyo/桌面/code/c++/opendata/tools/bin/processctrl 300 /home/akijyo/桌面/code/c++/opendata/tools/bin/deletefile /idcdata/jsontodb/vipbak ".*\\.json\\b" 0.02
+/home/akijyo/桌面/code/c++/opendata/tools/bin/processctrl 300 /home/akijyo/桌面/code/c++/opendata/tools/bin/deletefile /idcdata/jsontodb/viperr ".*\\.json\\b" 0.02
+
+#执行数据管理程序，定期删除T_ZHOBTMIND表中一天之前的数据
+/home/akijyo/桌面/code/c++/opendata/tools/bin/processctrl 3600 /home/akijyo/桌面/code/c++/opendata/tools/bin/deletetable /temp/log/deletetable.log /home/akijyo/桌面/code/c++/opendata/tools/others/deletetable.json
+
+#执行数据管理程序，定期迁移T_ZHOBTMIND1表中半天天之前的数据，迁移至T_ZHOBTMIND1_HIS表中
+/home/akijyo/桌面/code/c++/opendata/tools/bin/processctrl 3600 /home/akijyo/桌面/code/c++/opendata/tools/bin/migratetable /temp/log/migratetable.log /home/akijyo/桌面/code/c++/opendata/tools/others/migratetable.json
+
+#执行数据管理程序，定期删除T_ZHOBTMIND1_HIS表中一天之前的数据
+/home/akijyo/桌面/code/c++/opendata/tools/bin/processctrl 3600 /home/akijyo/桌面/code/c++/opendata/tools/bin/deletetable /temp/log/deleteHisTable.log /home/akijyo/桌面/code/c++/opendata/tools/others/deleteHisTable.json

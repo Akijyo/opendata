@@ -149,7 +149,7 @@ void dataToTable()
         // 3.1获取指定的数据json格式文件
         while (dir.readFile())
         {
-            //程序日志记录-运行时间
+            // 程序日志记录-运行时间
             timeCount tc;
             tc.startCount();
             // 3.2通过指定文件匹配数组中的数据入库参数，找到相关表名。
@@ -249,6 +249,7 @@ void dataToTable()
     }
 }
 // 3.2子函数：获取当前文件的入库参数
+// 一个目录中有很多种数据文件，根据文件名匹配表参数给当前循环使用
 bool getCurTable(const string &filename, datatotable &curTable)
 {
     for (auto &it : stargtable)

@@ -160,7 +160,7 @@ bool isRunTime(const string &starttime)
 // 获取上次增量抽取的最大值
 bool getIncreMax()
 {
-    //如果不是增量抽取，则返回
+    // 如果不是增量抽取，则返回
     if (starg.increfield.empty())
     {
         return true;
@@ -179,7 +179,7 @@ bool getIncreMax()
         lg.writeLine("增量字段在sql语句查询结果中不存在");
         return false;
     }
-    if (!starg.host1.empty())//如果host1不为空，则去查找数据库
+    if (!starg.host1.empty()) // 如果host1不为空，则去查找数据库
     {
         // 连接本地数据库
         shared_ptr<IConnection> connection = make_shared<mysql>();
@@ -202,7 +202,7 @@ bool getIncreMax()
             incremax = connection->get_int(0);
         }
     }
-    else//去查找文件
+    else // 去查找文件
     {
         // 打开记录本进程的增量最大值的文件
         rdfile rfincre;
@@ -229,7 +229,7 @@ void dmingdata(shared_ptr<IConnection> connection)
     // 3.1.1如果是增量抽取，则需要在sql语句中添加递增字段的条件
     if (!starg.increfield.empty())
     {
-        replaceStr(sql,"?",to_string(incremax));
+        replaceStr(sql, "?", to_string(incremax));
     }
     // 3.2执行sql语句
     if (!connection->query(sql))
@@ -239,9 +239,9 @@ void dmingdata(shared_ptr<IConnection> connection)
     }
 
     // 获取文件时间戳
-    string filetime = getCurTime(TimeType::TIME_TYPE_TWO);//获取当前时间
-    filetime += ":00";//秒位置0
-    filetime = pickNum(filetime);//去掉符号
+    string filetime = getCurTime(TimeType::TIME_TYPE_TWO); // 获取当前时间
+    filetime += ":00";                                     // 秒位置0
+    filetime = pickNum(filetime);                          // 去掉符号
     // 定义文件序号
     int fileindex = 1;
 
@@ -538,6 +538,7 @@ bool parseJson(const string &jsonfile)
 
 void help()
 {
+    cout << "本程序是共享平台的数据抽取通用模块，用于把指定数据源的数据抽出来，保存为json格式的文件" << endl;
     cout << "Usage: dminingmysql <logfile> <jsonfile>" << endl;
     cout << "logfile：用于保存抽取数据日志的文件" << endl;
     cout << "jsonfile：用于保存程序传入参数的json文件" << endl;
@@ -552,7 +553,9 @@ void help()
     cout << "db: 数据库名。" << endl;
     cout << "port: 数据库端口号，缺省3306。" << endl;
     cout << "charset: 数据库的字符集，这个参数要与数据源数据库保持一致，否则会出现乱码。" << endl;
-    cout << "selectsql: 从数据库源数据库抽取数据的sql语句，如果是增量抽取，一定要用递增字段作为查询条件，且增量值在sql中用?指出。" << endl;
+    cout << "selectsql: "
+            "从数据库源数据库抽取数据的sql语句，如果是增量抽取，一定要用递增字段作为查询条件，且增量值在sql中用?指出。"
+         << endl;
     cout << "fieldstr: 抽取数据的sql语句输出结果集的字段名列表，中间用逗号分割，将作为json文件的字段名" << endl;
     cout << "fieldtype: 抽数据的sql语句输出结果集的字段类型列表，字段类型是c/c++类型，且严格与fieldstr一一对应" << endl;
     cout << "outpath: 输出json文件存放的目录" << endl;
