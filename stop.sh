@@ -30,6 +30,12 @@ killall dminingmysql
 #停止数据入库模块
 killall jsontodb
 
+#停止数据管理模块
+killall deletetable migratetable
+
+#停止数据备份
+killall backups.sh
+
 sleep 5 
 
 killall -9 opendata
@@ -41,3 +47,5 @@ killall -9 fileserver tcpgetfiles tcpputfiles
 killall -9 obtcodetodb obtmindtodb obtmindtodb.sh
 killall -9 dminingmysql
 killall -9 jsontodb
+killall -9 deletetable migratetable
+killall -9 backups.sh

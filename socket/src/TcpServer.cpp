@@ -47,7 +47,6 @@ bool TcpServer::createListen(unsigned short port)
     caddr.sin_family = AF_INET;         // IPv4
     caddr.sin_port = htons(port);       // 小端转大端,绑定传入的端口
     caddr.sin_addr.s_addr = INADDR_ANY; // 本地任意IP
-
     // 2.绑定本地IP和端口
     if (bind(this->fd, (sockaddr *)&caddr, sizeof(caddr)) == -1)
     {

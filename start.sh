@@ -80,3 +80,9 @@
 
 #执行数据管理程序，定期删除T_ZHOBTMIND1_HIS表中一天之前的数据
 /home/akijyo/桌面/code/c++/opendata/tools/bin/processctrl 3600 /home/akijyo/桌面/code/c++/opendata/tools/bin/deletetable /temp/log/deleteHisTable.log /home/akijyo/桌面/code/c++/opendata/tools/others/deleteHisTable.json
+
+#每隔一段时间备份mysql从库的所有数据到/temp/database/backups目录下，当系统时到02,13点脚本才可以运行，否则不备份
+/home/akijyo/桌面/code/c++/opendata/tools/bin/processctrl 3600 /home/akijyo/桌面/code/c++/opendata/database/backups.sh
+
+#定期清理/temp/database/backups目录下7天之前的文件
+/home/akijyo/桌面/code/c++/opendata/tools/bin/processctrl 3600 /home/akijyo/桌面/code/c++/opendata/tools/bin/deletefile /temp/database/backups ".*\\.sql\\b" 7

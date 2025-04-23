@@ -58,3 +58,5 @@ networks:
 
 #START SLAVE;
 #SHOW SLAVE STATUS\G  -- 验证Slave_IO_Running和Slave_SQL_Running状态
+
+#如果主从已经配置完成，后面如果想要备份数据并且用这个数据恢复到这个主从上，得对mysqldump加参数--set-gtid-purged=OFF

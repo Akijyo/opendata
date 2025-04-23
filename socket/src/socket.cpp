@@ -64,9 +64,12 @@ bool Socket::readn(int fd, void *buffer, size_t n)
             }
             if (errno == EAGAIN || errno == EWOULDBLOCK)
             {
-                // continue说明，非阻塞io不会因为收不到数据而返回false
-                // continue;
-                // 下面则反之
+                // 这里原有代码是continue,当ret<0的两个条件都是coutinue,的情况下，该函数会一直循环直到读完外部指定的n个字节才返回，或者对端关闭连接
+                // 这个if里改为return false，表示当读缓冲区为空立刻返回false，这样写的目的是
+                // 1.配合业务程序循环调用recvmsg函数从而防止瞬时信息太多导致粘包
+                // 2.由于业务使用了循环，当读缓冲区没有数据，函数返回false防止死循环等待，释放线程。
+                // 3.配合业务的循环，减少io多路复用的压力，由于本epool模型配合连接池回调，主要目的是减少线程池的压力
+                
                 return false;
             }
         }
