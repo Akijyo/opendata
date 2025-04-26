@@ -78,7 +78,7 @@ int main(int argc, char *argv[])
         cout << "打开日志文件失败！" << endl;
         return 0;
     }
-    phtimeout=atoi(argv[4]);
+    phtimeout = atoi(argv[4]);
     // 初始化进程心跳
     ph.addProcInfo(getpid(), argv[0], phtimeout);
     // 1.连接外网反向代理程序
@@ -122,6 +122,7 @@ bool connectOutside()
     }
     // 1.3设置非阻塞
     setnonblocking(cmdConnectScoket);
+    lg.writeLine("与外网建立命令通道成功：%d", cmdConnectScoket);
     return true;
 }
 
@@ -190,6 +191,7 @@ bool epollLoop()
             if (events[i].events & EPOLLERR || events[i].events & EPOLLHUP)
             {
                 // 关闭连接，并且删除客户端-目标服务器的连接信息
+                lg.writeLine("套接字端(socket=%d)遇到错误", curfd);
                 closeAndDelete(curfd);
             }
         }
@@ -205,7 +207,7 @@ bool connection()
     char buffer[1024];
     int buflen = 0;
     // 3.3.1接受来自命令通道的数据，也就是外网代理程序发来的ip和端口的json字符串
-    //这里json字符串可能分包/粘包，现在暂时不解决
+    // 这里json字符串可能分包/粘包，现在暂时不解决
     buflen = recv(cmdConnectScoket, buffer, sizeof(buffer), 0);
     if (buflen <= 0)
     {
@@ -219,21 +221,21 @@ bool connection()
         EXIT(-1);
     }
     // 3.3.2成功读取数据，解析json字符串
-    string dstip, dstport;
+    string dstip;
+    int dstport;
     string jsonstr(buffer, buflen);
     try
     {
         nlohmann::json json = nlohmann::json::parse(jsonstr);
-        dstip = json["dstip"].get<string>();
-        dstport = json["dstport"].get<string>();
-        lg.writeLine("命令通道接收到连接请求，目标ip=%s，端口=%s", dstip.c_str(), dstport.c_str());
+        dstip = json["dstip"];
+        dstport = json["dstport"];
+        lg.writeLine("命令通道接收到连接请求，目标ip=%s，端口=%d", dstip.c_str(), dstport);
     }
-    catch (const nlohmann::json::parse_error &e)
+    catch (const std::exception &e)
     {
         lg.writeLine("json解析失败");
         return false;
     }
-    int dstportint = stoi(dstport);
     //---------------------------------------------------------------------------------
     // 3.3.3连接内网的目标服务器
     // 创建内网目标服务器的socket
@@ -248,7 +250,7 @@ bool connection()
     // 构建sockaddr_in结构体
     sockaddr_in paddr;
     paddr.sin_family = AF_INET;
-    paddr.sin_port = htons(dstportint);
+    paddr.sin_port = htons(dstport);
     inet_pton(AF_INET, dstip.c_str(), &paddr.sin_addr.s_addr);
     // 连接内网的目标服务器
     if (connect(pfd, (sockaddr *)&paddr, sizeof(paddr)) == -1)
@@ -352,7 +354,6 @@ bool recvData(int curfd)
             // 暂时没有数据，非错误情况，由非阻塞io造成
             return false; // 原continue
         }
-        lg.writeLine("客户端（socket=%d）连接断开", curfd);
         // 关闭外网代理程序-内网目标服务器的通信描述符并且移除资源
         closeAndDelete(curfd);
         return false; // 原continue
@@ -388,7 +389,6 @@ bool sendData(int curfd)
             // 发送缓冲区已满，稍后再试
             return false; // 原continue
         }
-        lg.writeLine("客户端（socket=%d）连接断开", curfd);
         // 关闭客户端-目标服务器的通信描述符并且移除资源
         closeAndDelete(curfd);
         return false; // 原continue
@@ -420,6 +420,7 @@ void closeAndDelete(int cfd)
     // 没有则只处理客户端一个通信描述符
     if (it == proxyMap.end())
     {
+        //lg.writeLine("套接字端(socket=%d)连接断开", cfd);
         // 关闭通信描述符
         close(cfd);
         // 删除缓冲区信息
@@ -432,6 +433,8 @@ void closeAndDelete(int cfd)
     {
         // 获取当前客户端fd对应的目标服务器fd
         int pfd = proxyMap[cfd];
+        lg.writeLine("套接字端(socket=%d)连接断开", cfd);
+        lg.writeLine("套接字端(socket=%d)连接断开", pfd);
         // 关闭两段的套接字
         close(cfd);
         close(pfd);

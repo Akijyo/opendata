@@ -466,7 +466,6 @@ bool recvData(int curfd)
             // 暂时没有数据，非错误情况，由非阻塞io造成
             return false; // 原continue
         }
-        lg.writeLine("客户端（socket=%d）连接断开", curfd);
         // 关闭客户端-目标服务器的通信描述符并且移除资源
         closeAndDelete(curfd);
         return false; // 原continue
@@ -502,7 +501,6 @@ bool sendData(int curfd)
             // 发送缓冲区已满，稍后再试
             return false; // 原continue
         }
-        lg.writeLine("客户端（socket=%d）连接断开", curfd);
         // 关闭客户端-目标服务器的通信描述符并且移除资源
         closeAndDelete(curfd);
         return false; // 原continue
@@ -534,6 +532,7 @@ void closeAndDelete(int cfd)
     // 没有则只处理客户端一个通信描述符
     if (it == proxyMap.end())
     {
+        //lg.writeLine("套接字端(socket=%d)连接断开", cfd);
         // 关闭通信描述符
         close(cfd);
         // 删除缓冲区信息
@@ -546,6 +545,8 @@ void closeAndDelete(int cfd)
     {
         // 获取当前客户端fd对应的目标服务器fd
         int pfd = proxyMap[cfd];
+        lg.writeLine("套接字端(socket=%d)连接断开", cfd);
+        lg.writeLine("套接字端(socket=%d)连接断开", pfd);
         // 关闭两段的套接字
         close(cfd);
         close(pfd);
