@@ -24,7 +24,7 @@ link_libraries(mysqlclient)
 
 
 #编译main程序
-##[[
+#[[
 # 递归查找所有cpp文件
 file(GLOB_RECURSE PUBLIC_CPP_FILE "${CMAKE_CURRENT_SOURCE_DIR}/public/*.cpp")
 file(GLOB_RECURSE SOCKET_CPP_FILE "${CMAKE_CURRENT_SOURCE_DIR}/socket/*.cpp")
@@ -42,11 +42,11 @@ foreach(SOURCE_FILE ${CPP_SOURCES})
     # 添加可执行目标
     add_executable(${EXEC_NAME} ${SOURCE_FILE} ${PUBLIC_CPP_FILE} ${SOCKET_CPP_FILE} ${THREAD_CPP_FILE} ${FILETRANSFER_CPP_FILE} ${DB_CPP_FILE})
 endforeach()
-#]]
+]]
 
 #编译demo测试文件
 
-#[[
+##[[
 # 递归查找demo程序需要的所有cpp文件
 file(GLOB_RECURSE PUBLIC_CPP_FILE "${CMAKE_CURRENT_SOURCE_DIR}/public/*.cpp")
 file(GLOB_RECURSE SOCKET_CPP_FILE "${CMAKE_CURRENT_SOURCE_DIR}/socket/*.cpp")
@@ -58,10 +58,10 @@ file(GLOB_RECURSE DB_CPP_FILE "${CMAKE_CURRENT_SOURCE_DIR}/database/*.cpp")
 #add_subdirectory(demo/stringopd)
 #add_subdirectory(demo/timeframed)
 #add_subdirectory(demo/fileframed)
-#add_subdirectory(demo/socketd)
+add_subdirectory(demo/socketd)
 #add_subdirectory(demo/procheart)
 #add_subdirectory(demo/cftp)
-add_subdirectory(demo/databased)
-]]
+#add_subdirectory(demo/databased)
+#]]
 
 
