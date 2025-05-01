@@ -30,7 +30,7 @@ class mysql : public IConnection
     bool set_charset(const std::string charset) override; // 设置字符集
 
     // 结果集处理操作
-    bool next() override;            // 结果集导航，移动到下一行
+    bool next() override;            // 结果集导航，移动到下一行，刚查询完会在字段的那一行，而不是数据
     bool seek(int row_num) override; // 跳转到结果集的指定行
     // 采用std::optional，方便处理数据库中的NULL值，而且可以区分NULL值和空值，如果值为空，则返回""空字符串，如果NULL值则返回std::nullopt，外部可以实现判断
     //
